@@ -80,7 +80,6 @@ class BasePage extends StatelessWidget {
         ),
       ),
 
-      // ── Bottom nav — Scaffold places it above system nav bar ──────
       bottomNavigationBar: Obx(() => CustomBottomNavigationBar(
         currentIndex: controller.currentIndex.value,
         onTabSelected: controller.onTabSelected,
