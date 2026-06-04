@@ -1,0 +1,146 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../core/util/app_navigation.dart';
+import '../../../core/widgets/snakbar/custom_snackbar.dart';
+import '../views/plan_ready_screen.dart';
+
+class UserInfoController extends GetxController {
+  final pageController = PageController();
+  final currentStep = 0.obs;
+
+  static const int totalSteps = 8;
+
+  // Step 0 - Age
+  final selectedAge = 19.obs;
+
+  // Step 1 - Weight
+  final weightUnit = 'KG'.obs;
+  final weightController = TextEditingController(text: '62');
+
+  // Step 2 - Gender
+  final selectedGender = ''.obs;
+  final genders = [
+    {'emoji': '👩', 'label': 'Female'},
+    {'emoji': '👨', 'label': 'Male'},
+    {'emoji': '🧑', 'label': 'Other'},
+  ];
+
+  // Step 3 - Height
+  final heightUnit = 'Cm'.obs;
+  final heightController = TextEditingController(text: '172');
+
+  // Step 4 - Diet
+  final selectedDiet = ''.obs;
+  final diets = [
+    {'emoji': '🍽️', 'label': 'No Preference'},
+    {'emoji': '🥦', 'label': 'Vegetarian'},
+    {'emoji': '🌱', 'label': 'Vegan'},
+    {'emoji': '🌾', 'label': 'Gluten-Free'},
+  ];
+
+  // Step 5 - Primary Goal
+  final selectedGoal = ''.obs;
+  final goals = [
+    {'emoji': '🔥', 'label': 'Fat Loss'},
+    {'emoji': '💪', 'label': 'Muscle Gain'},
+    {'emoji': '🏃', 'label': 'Endurance'},
+    {'emoji': '❤️', 'label': 'General Health'},
+  ];
+
+  // Step 6 - Activity Level
+  final selectedActivity = ''.obs;
+  final activities = [
+    {'emoji': '🪑', 'label': 'Sedentary'},
+    {'emoji': '🚶', 'label': 'Light'},
+    {'emoji': '🏃', 'label': 'Moderate'},
+    {'emoji': '💪', 'label': 'Active'},
+    {'emoji': '🔥', 'label': 'Very Active'},
+  ];
+
+  // Step 7 - Workout Time
+  final selectedWorkoutTime = ''.obs;
+  final workoutTimes = [
+    {'emoji': '🌅', 'label': 'Morning'},
+    {'emoji': '⛅', 'label': 'Afternoon'},
+    {'emoji': '🌆', 'label': 'Evening'},
+    {'emoji': '⛅', 'label': 'Flexible'},
+  ];
+
+  double get progress => (currentStep.value + 1) / totalSteps;
+
+  void onPageChanged(int index) => currentStep.value = index;
+
+  void nextStep() {
+    if (!_validateCurrentStep()) return;
+    if (currentStep.value < totalSteps - 1) {
+      pageController.nextPage(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      _submitAndNavigate();
+    }
+  }
+
+  void goBack() {
+    if (currentStep.value > 0) {
+      pageController.previousPage(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      Get.back();
+    }
+  }
+
+  bool _validateCurrentStep() {
+    switch (currentStep.value) {
+      case 2:
+        if (selectedGender.value.isEmpty) {
+          CustomSnackBar.error('Please select your gender.');
+          return false;
+        }
+      case 4:
+        if (selectedDiet.value.isEmpty) {
+          CustomSnackBar.error('Please select a diet preference.');
+          return false;
+        }
+      case 5:
+        if (selectedGoal.value.isEmpty) {
+          CustomSnackBar.error('Please select your primary goal.');
+          return false;
+        }
+      case 6:
+        if (selectedActivity.value.isEmpty) {
+          CustomSnackBar.error('Please select your activity level.');
+          return false;
+        }
+      case 7:
+        if (selectedWorkoutTime.value.isEmpty) {
+          CustomSnackBar.error('Please select your workout time.');
+          return false;
+        }
+    }
+    return true;
+  }
+
+  void _submitAndNavigate() {
+    // TODO: call API with all collected data
+    AppNavigation.push(PlanReadyScreen(
+      calories: _calculateCalories(),
+      protein: _calculateProtein(),
+    ));
+  }
+
+  int _calculateCalories() => 2150;
+  int _calculateProtein() => 180;
+
+  @override
+  void onClose() {
+    pageController.dispose();
+    weightController.dispose();
+    heightController.dispose();
+    super.onClose();
+  }
+}

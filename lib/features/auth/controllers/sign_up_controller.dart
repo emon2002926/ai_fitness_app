@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../core/services/api/services/api_services.dart';
 import '../../../core/util/app_navigation.dart';
+import '../views/otp_verification_screen.dart';
 import '../views/sign_in_screen.dart';
 
 
@@ -65,7 +66,9 @@ class SignUpController extends GetxController {
   }
 
   Future<void> signUp() async {
-    // if (!formKey.currentState!.validate()) return;
+    AppNavigation.push(OtpVerificationScreen(email: "",isFromSignUp: true,));
+
+        // if (!formKey.currentState!.validate()) return;
     //
     // isLoading.value = true;
     // try {

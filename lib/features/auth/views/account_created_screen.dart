@@ -7,6 +7,7 @@ import '../../../core/util/app_navigation.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/text/app_text.dart';
+import '../../onboarding/views/user_info_screen.dart';
 
 class AccountCreatedScreen extends StatelessWidget {
   const AccountCreatedScreen({super.key});
@@ -54,7 +55,7 @@ class AccountCreatedScreen extends StatelessWidget {
 
               AppButton(
                 buttonText: 'Sign In',
-                onPressed: () => AppNavigation.push(SignInScreen()),
+                onPressed: () => AppNavigation.push(UserInfoScreen()),
                 fillColor: const Color(0xFFF5A623),
                 textColor: Colors.white,
                 fontSize: 16,
