@@ -18,59 +18,55 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      {'icon': Icons.home_outlined, 'label': 'Home'},
-      {'icon': Icons.history_outlined, 'label': 'Workout'},
-      {'icon': Icons.person_outline, 'label': 'Ai Coach'},
-      {'icon': Icons.settings_outlined, 'label': 'Nutrition'},
-      {'icon': Icons.settings_outlined, 'label': 'Levels '},
-      {'icon': Icons.settings_outlined, 'label': 'Progress'},
+      Icons.home_rounded,
+      Icons.grid_view_rounded,
+      Icons.chat_bubble_outline_rounded,
+      Icons.pie_chart_outline_rounded,
+      Icons.bar_chart_rounded,
+      Icons.emoji_events_outlined,
     ];
 
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFFF0EFE9),
-        border: Border(
-          top: BorderSide(color: Color(0xFFE0DDD7), width: 1),
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          context.w(16),
+          context.h(8),
+          context.w(16),
+          context.h(16),
         ),
-      ),
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: context.h(64),
+        child: Container(
+          height: context.h(68),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1A1A1A),
+            borderRadius: BorderRadius.circular(context.w(50)),
+            border: Border.all(color: Colors.white12, width: 1),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: context.w(8)),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(items.length, (index) {
               final isSelected = currentIndex == index;
-              final label = items[index]['label'] as String;
-              final icon = items[index]['icon'] as IconData;
 
-              return Expanded(
-                child: GestureDetector(
-                  onTap: () => onTabSelected(index),
-                  behavior: HitTestBehavior.opaque,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        icon,
-                        size: context.sp(24),
-                        color: isSelected
-                            ? const Color(0xFF3D7060)
-                            : const Color(0xFFB0ADA8),
-                      ),
-                      SizedBox(height: context.h(4)),
-                      // AppText(
-                      //   data: label,
-                      //   fontSize: 13,
-                      //   googleFontFamily: GoogleFonts.jost,
-                      //
-                      //   fontWeight: isSelected
-                      //       ? FontWeight.w700
-                      //       : FontWeight.w400,
-                      //   color: isSelected
-                      //       ? const Color(0xFF3D7060)
-                      //       : const Color(0xFFB0ADA8),
-                      // ),
-                    ],
+              return GestureDetector(
+                onTap: () => onTabSelected(index),
+                behavior: HitTestBehavior.opaque,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                  width: context.w(isSelected ? 52 : 40),
+                  height: context.w(isSelected ? 52 : 40),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? const Color(0xFFF5A623)
+                        : Colors.transparent,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Icon(
+                    items[index],
+                    size: context.sp(isSelected ? 24 : 22),
+                    color: Colors.white,
                   ),
                 ),
               );

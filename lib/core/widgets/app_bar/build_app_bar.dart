@@ -6,94 +6,130 @@ import '../text/app_text.dart';
 
 class BuildAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
-  final Color? titleColor;
-  final Color? iconColor;
-  final bool showSideButton;
-  final VoidCallback? onSideButtonPressed;
-  final IconData sideButtonIcon;
   final bool showBackButton;
+  final VoidCallback? onBackButtonPressed;
+  final bool showNotification;
+  final VoidCallback? onNotificationPressed;
+  final String? avatarUrl;
+  final VoidCallback? onAvatarPressed;
   final Color? backgroundColor;
   final double? titleFontSize;
   final FontWeight? fontWeight;
-  final VoidCallback? onBackButtonPressed;
 
   const BuildAppBar({
     super.key,
     this.title,
-    this.titleColor,
-    this.iconColor,
-    this.showSideButton = false,
-    this.onSideButtonPressed,
-    this.sideButtonIcon = Icons.notifications_none_rounded,
     this.showBackButton = true,
+    this.onBackButtonPressed,
+    this.showNotification = false,
+    this.onNotificationPressed,
+    this.avatarUrl,
+    this.onAvatarPressed,
     this.backgroundColor,
     this.titleFontSize,
     this.fontWeight,
-    this.onBackButtonPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: backgroundColor ?? Colors.transparent,
+      color: backgroundColor ?? Colors.black,
       child: SafeArea(
         bottom: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: context.responsiveSize(16),
-                vertical: context.responsiveSize(12),
-              ),
-              child: Row(
-                children: [
-                  showBackButton
-                      ? GestureDetector(
+        child: SizedBox(
+          height: kToolbarHeight,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: context.w(16)),
+            child: Row(
+              children: [
+                if (showBackButton)
+                  GestureDetector(
                     onTap: onBackButtonPressed ?? () => Navigator.pop(context),
-                    child: Padding(
-                      padding: EdgeInsets.only(right: context.responsiveSize(8)),
-                      child: Icon(
-                        Icons.chevron_left,
-                        size: context.responsiveSize(32),
-                        color: iconColor ?? Colors.black87,
+                    child: Container(
+                      width: context.w(40),
+                      height: context.w(40),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFF5A623),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 20,
                       ),
                     ),
                   )
-                      : SizedBox(width: context.responsiveSize(32)),
+                else
+                  SizedBox(width: context.w(40)),
 
-                  Expanded(
-                    child: title != null
-                        ? AppText(
-                      data: title!,
-                      fontSize: titleFontSize ?? 20,
-                      fontWeight: fontWeight ?? FontWeight.w600,
-                      color: titleColor ?? Colors.black87,
-                      useResponsiveFontSize: true,
-                      textAlign: TextAlign.center,
-                    )
-                        : const SizedBox.shrink(),
-                  ),
-
-                  showSideButton
-                      ? GestureDetector(
-                    onTap: onSideButtonPressed,
-                    child: Icon(
-                      sideButtonIcon,
-                      size: context.responsiveSize(28),
-                      color: iconColor ?? Colors.black87,
-                    ),
+                Expanded(
+                  child: title != null
+                      ? AppText(
+                    data: title!,
+                    fontSize: titleFontSize ?? 20,
+                    fontWeight: fontWeight ?? FontWeight.w600,
+                    color: Colors.white,
+                    textAlign: TextAlign.center,
                   )
-                      : SizedBox(width: context.responsiveSize(32)),
-                ],
-              ),
+                      : const SizedBox.shrink(),
+                ),
+
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (showNotification)
+                      GestureDetector(
+                        onTap: onNotificationPressed,
+                        child: Stack(
+                          children: [
+                            Icon(
+                              Icons.notifications_outlined,
+                              color: Colors.white,
+                              size: context.sp(26),
+                            ),
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              child: Container(
+                                width: context.w(8),
+                                height: context.w(8),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFF5A623),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (showNotification && avatarUrl != null)
+                      SizedBox(width: context.w(12)),
+                    if (avatarUrl != null)
+                      GestureDetector(
+                        onTap: onAvatarPressed,
+                        child: Container(
+                          width: context.w(38),
+                          height: context.w(38),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0xFFF5A623),
+                              width: 2,
+                            ),
+                            image: DecorationImage(
+                              image: NetworkImage(avatarUrl!),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      )
+                    else if (!showNotification)
+                      SizedBox(width: context.w(40)),
+                  ],
+                ),
+              ],
             ),
-            Container(
-              width: double.infinity,
-              height: 0.8,
-              color: Colors.black12,
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -101,5 +137,4 @@ class BuildAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-
 }
