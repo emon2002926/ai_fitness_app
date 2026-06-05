@@ -202,7 +202,7 @@ class _LevelCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(context.w(16)),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: Colors.white70),
       ),
       child: Row(
         children: [
@@ -321,7 +321,7 @@ class _StatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(context.w(14)),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: Colors.white70),
       ),
       child: Stack(
         children: [
@@ -374,7 +374,7 @@ class _TodayPlanCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(context.w(16)),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: Colors.white70),
       ),
       clipBehavior: Clip.hardEdge,
       child: Stack(
@@ -420,10 +420,11 @@ class _TodayPlanCard extends StatelessWidget {
                 SizedBox(height: context.h(16)),
                 AppButton(
                   buttonText: 'Start Workout',
-                  onPressed: controller.onStartWorkout,
+                  onPressed: (){controller.onStartWorkout(context);},
                   fillColor: const Color(0xFFF5A623),
                   textColor: Colors.white,
                   fontSize: 14,
+                  borderRadius: 10,
                   fontWeight: FontWeight.w600,
                   buttonWidth: context.w(150),
                   buttonHeight: 44,
@@ -449,7 +450,7 @@ class _CalorieCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(context.w(16)),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: Colors.white70),
       ),
       child: Column(
         children: [

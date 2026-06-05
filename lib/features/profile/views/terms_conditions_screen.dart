@@ -29,7 +29,6 @@ class TermsConditionsScreen extends StatelessWidget {
         avatarUrl: controller.avatarUrl.value.isEmpty
             ? null
             : controller.avatarUrl.value,
-        onAvatarPressed: controller.onAvatarPressed,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(

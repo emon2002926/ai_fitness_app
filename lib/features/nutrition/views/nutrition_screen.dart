@@ -22,7 +22,6 @@ class NutritionScreen extends StatelessWidget {
         showBackButton: false,
         avatarUrl: 'assets/images/avatar.png',
         onNotificationPressed: () {},
-        onAvatarPressed: () {},
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(bottom: context.h(100)),
@@ -77,7 +76,7 @@ class _WeekDayPicker extends StatelessWidget {
                   color: isSelected ? const Color(0xFFF5A623) : const Color(0xFF1A1A1A),
                   borderRadius: BorderRadius.circular(context.w(14)),
                   border: Border.all(
-                    color: isSelected ? Colors.transparent : Colors.white12,
+                    color: isSelected ? Colors.transparent : Colors.white70,
                   ),
                 ),
                 child: Column(
@@ -169,7 +168,7 @@ class _MealCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xFF1A1A1A),
           borderRadius: BorderRadius.circular(context.w(14)),
-          border: Border.all(color: Colors.white12),
+          border: Border.all(color: Colors.white70),
         ),
         child: Row(
           children: [

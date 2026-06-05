@@ -11,7 +11,6 @@ class BaseController extends GetxController {
   final RxInt currentIndex = 0.obs;
   int lastTapTime = 0;
 
-  // ── Nav keys for each tab ─────────────────────────────────────────────────
   final homeNavKey     = GlobalKey<NavigatorState>();
   final workOutNavKey  = GlobalKey<NavigatorState>();
   final aiCoachNavKey  = GlobalKey<NavigatorState>();
@@ -23,7 +22,6 @@ class BaseController extends GetxController {
 
   void openDrawer() => scaffoldKey.currentState?.openDrawer();
 
-  // Public — accessible from BasePage in a different file
   GlobalKey<NavigatorState> keyForIndex(int index) {
     switch (index) {
       case 1:  return workOutNavKey;
@@ -44,7 +42,6 @@ class BaseController extends GetxController {
     } else {
       currentIndex.value = index;
 
-      // Show premium sheet when user taps Nutrition tab
       if (index == 3) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           final nutritionController = Get.find<NutritionController>();

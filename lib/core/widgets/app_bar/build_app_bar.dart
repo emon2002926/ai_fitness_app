@@ -1,5 +1,7 @@
+import 'package:ai_fitness_app/core/util/app_navigation.dart';
 import 'package:flutter/material.dart';
 
+import '../../../features/profile/views/profile_screen.dart';
 import '../../util/screen_size.dart';
 import '../text/app_text.dart';
 
@@ -15,6 +17,8 @@ class BuildAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? backgroundColor;
   final double? titleFontSize;
   final FontWeight? fontWeight;
+  final bool isAssetAvatar;
+
 
   const BuildAppBar({
     super.key,
@@ -28,6 +32,7 @@ class BuildAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.titleFontSize,
     this.fontWeight,
+    this.isAssetAvatar = true,   // default to asset since that's what you use now
   });
 
   @override
@@ -66,8 +71,8 @@ class BuildAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: title != null
                       ? AppText(
                     data: title!,
-                    fontSize: titleFontSize ?? 20,
-                    fontWeight: fontWeight ?? FontWeight.w600,
+                    fontSize: titleFontSize ?? 24,
+                    fontWeight: fontWeight ?? FontWeight.bold,
                     color: Colors.white,
                     textAlign: TextAlign.center,
                   )
@@ -106,7 +111,9 @@ class BuildAppBar extends StatelessWidget implements PreferredSizeWidget {
                       SizedBox(width: context.w(12)),
                     if (avatarUrl != null)
                       GestureDetector(
-                        onTap: onAvatarPressed,
+                        onTap: onAvatarPressed ?? (){
+                          AppNavigation.push(ProfileScreen(), context: context);
+                        },
                         child: Container(
                           width: context.w(38),
                           height: context.w(38),
@@ -117,7 +124,9 @@ class BuildAppBar extends StatelessWidget implements PreferredSizeWidget {
                               width: 2,
                             ),
                             image: DecorationImage(
-                              image: NetworkImage(avatarUrl!),
+                              image: isAssetAvatar
+                                  ? AssetImage("assets/images/avatar.png") as ImageProvider
+                                  : NetworkImage(avatarUrl!),
                               fit: BoxFit.cover,
                             ),
                           ),

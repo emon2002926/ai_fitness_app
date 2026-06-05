@@ -57,13 +57,11 @@ class LevelsScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: BuildAppBar(
         title: 'Levels',
+        fontWeight: FontWeight.bold,
         showBackButton: false,
         showNotification: true,
         onNotificationPressed: controller.onNotificationPressed,
-        avatarUrl: controller.avatarUrl.value.isEmpty
-            ? null
-            : controller.avatarUrl.value,
-        onAvatarPressed: controller.onAvatarPressed,
+        avatarUrl: 'assets/images/avatar.png',
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -97,7 +95,7 @@ class _LevelProgressCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white12, width: 1),
+        border: Border.all(color: Colors.white70, width: 1),
       ),
       child: Row(
         children: [

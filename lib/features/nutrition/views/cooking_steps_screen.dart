@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/app_bar/build_app_bar.dart';
 import '../../../core/widgets/buttons/app_button.dart';
@@ -24,49 +23,51 @@ class CookingStepsScreen extends StatelessWidget {
         showNotification: true,
         avatarUrl: 'assets/images/avatar.png',
         onNotificationPressed: () {},
-        onAvatarPressed: () {},
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _HeroImage(meal: meal, controller: controller),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: context.w(20)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: context.h(16)),
-                        _MetaRow(meal: meal),
-                        SizedBox(height: context.h(16)),
-                        _MacroPills(meal: meal),
-                        SizedBox(height: context.h(28)),
-                        _SectionTitle(title: 'Ingredients'),
-                        SizedBox(height: context.h(16)),
-                        ...controller.ingredients.map((i) => _IngredientRow(ingredient: i)),
-                        SizedBox(height: context.h(28)),
-                        _SectionTitle(title: 'Cooking Steps'),
-                        SizedBox(height: context.h(16)),
-                        ...controller.steps.map((s) => _StepRow(step: s)),
-                        SizedBox(height: context.h(24)),
-                      ],
-                    ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _HeroImage(meal: meal, controller: controller),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: context.w(20)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: context.h(16)),
+                            _MetaRow(meal: meal),
+                            SizedBox(height: context.h(16)),
+                            _MacroPills(meal: meal),
+                            SizedBox(height: context.h(28)),
+                            _SectionTitle(title: 'Ingredients'),
+                            SizedBox(height: context.h(16)),
+                            ...controller.ingredients.map((i) => _IngredientRow(ingredient: i)),
+                            SizedBox(height: context.h(28)),
+                            _SectionTitle(title: 'Cooking Steps'),
+                            SizedBox(height: context.h(16)),
+                            ...controller.steps.map((s) => _StepRow(step: s)),
+                            SizedBox(height: context.h(24)),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-          _LogMealButton(controller: controller),
-        ],
+            _LogMealButton(controller: controller),
+          ],
+        ),
       ),
     );
   }
 }
-
-// ── Hero Image ────────────────────────────────────────────────────────────────
 
 class _HeroImage extends StatelessWidget {
   final MealItem meal;
@@ -80,7 +81,7 @@ class _HeroImage extends StatelessWidget {
       width: double.infinity,
       height: context.h(280),
       child: Image.asset(
-        meal.image,
+        "assets/images/recipe.png",
         width: double.infinity,
         height: context.h(280),
         fit: BoxFit.cover,
@@ -89,7 +90,6 @@ class _HeroImage extends StatelessWidget {
   }
 }
 
-// ── Meta Row ─────────────────────────────────────────────────────────────────
 
 class _MetaRow extends StatelessWidget {
   final MealItem meal;
@@ -144,7 +144,7 @@ class _MetaRow extends StatelessWidget {
   }
 }
 
-// ── Macro Pills ───────────────────────────────────────────────────────────────
+
 
 class _MacroPills extends StatelessWidget {
   final MealItem meal;
@@ -154,11 +154,11 @@ class _MacroPills extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _MacroPill(emoji: '🍗', label: 'Protein', value: meal.protein),
+        Expanded(child: _MacroPill(emoji: '🍗', label: 'Protein', value: meal.protein)),
         SizedBox(width: context.w(10)),
-        _MacroPill(emoji: '🌾', label: 'Carbs', value: 22),
+        Expanded(child: _MacroPill(emoji: '🌾', label: 'Carbs', value: 22)),
         SizedBox(width: context.w(10)),
-        _MacroPill(emoji: '🥩', label: 'Fat', value: 11),
+        Expanded(child: _MacroPill(emoji: '🥩', label: 'Fat', value: 11)),
       ],
     );
   }
@@ -184,19 +184,23 @@ class _MacroPill extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(context.w(30)),
-        border: Border.all(color: Colors.white24),
+        borderRadius: BorderRadius.circular(context.w(10)),
+        border: Border.all(color: Colors.white70),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(emoji, style: TextStyle(fontSize: context.sp(14))),
           SizedBox(width: context.w(6)),
-          AppText(
-            data: label,
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
+          Flexible(
+            child: AppText(
+              data: label,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+              maxLines: 1,                 // ✅ AppText supports these
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           SizedBox(width: context.w(8)),
           AppText(
@@ -211,7 +215,7 @@ class _MacroPill extends StatelessWidget {
   }
 }
 
-// ── Section Title ─────────────────────────────────────────────────────────────
+
 
 class _SectionTitle extends StatelessWidget {
   final String title;
@@ -230,7 +234,7 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-// ── Ingredient Row ────────────────────────────────────────────────────────────
+
 
 class _IngredientRow extends StatelessWidget {
   final Ingredient ingredient;
@@ -247,7 +251,7 @@ class _IngredientRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(context.w(14)),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: Colors.white70),
       ),
       child: Row(
         children: [
@@ -284,7 +288,6 @@ class _IngredientRow extends StatelessWidget {
   }
 }
 
-// ── Step Row ──────────────────────────────────────────────────────────────────
 
 class _StepRow extends StatelessWidget {
   final CookingStep step;
@@ -340,7 +343,6 @@ class _StepRow extends StatelessWidget {
   }
 }
 
-// ── Log Meal Button ───────────────────────────────────────────────────────────
 
 class _LogMealButton extends StatelessWidget {
   final CookingStepsController controller;

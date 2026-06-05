@@ -24,24 +24,23 @@ class WorkOutScreen extends StatelessWidget {
         avatarUrl: 'assets/images/avatar.png',
         onNotificationPressed: () {
         },
-        onAvatarPressed: () {
-          AppNavigation.push(ProfileScreen(),context: context);
 
-        },
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: context.w(20)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: context.h(20)),
-            _StatsRow(controller: controller),
-            SizedBox(height: context.h(20)),
-            _WeekDayPicker(controller: controller),
-            SizedBox(height: context.h(20)),
-            _WorkoutCard(controller: controller),
-            SizedBox(height: context.h(40)),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: context.w(20)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: context.h(20)),
+              _StatsRow(controller: controller),
+              SizedBox(height: context.h(20)),
+              _WeekDayPicker(controller: controller),
+              SizedBox(height: context.h(20)),
+              _WorkoutCard(controller: controller),
+              SizedBox(height: context.h(40)),
+            ],
+          ),
         ),
       ),
     );
@@ -105,7 +104,7 @@ class _WorkoutStatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(context.w(14)),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: Colors.white70),
       ),
       child: Column(
         children: [
@@ -157,7 +156,7 @@ class _WeekDayPicker extends StatelessWidget {
                     : const Color(0xFF1A1A1A),
                 borderRadius: BorderRadius.circular(context.w(14)),
                 border: Border.all(
-                  color: isSelected ? Colors.transparent : Colors.white12,
+                  color: isSelected ? Colors.transparent : Colors.white70 ,
                 ),
               ),
               child: Column(
@@ -196,7 +195,7 @@ class _WorkoutCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(context.w(16)),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: Colors.white70),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -236,7 +235,7 @@ class _WorkoutCard extends StatelessWidget {
               ],
             ),
           ),
-          Divider(color: Colors.white12, height: 1),
+          Divider(color: Colors.white70, height: 1),
           Padding(
             padding: EdgeInsets.all(context.w(16)),
             child: Column(
@@ -286,6 +285,7 @@ class _WorkoutCard extends StatelessWidget {
                   fillColor: const Color(0xFFF5A623),
                   textColor: Colors.white,
                   fontSize: 14,
+                  borderRadius: 10,
                   fontWeight: FontWeight.w700,
                 ),
               ],

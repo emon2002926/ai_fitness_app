@@ -1,18 +1,19 @@
 import 'package:ai_fitness_app/core/util/app_navigation.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../base_screen/controllers/base_controller.dart';
 import '../../profile/views/profile_screen.dart';
+import '../../work_out/views/work_out_screen.dart';
+import '../widgets/workout_preview_dialog.dart';
 
 class HomeController extends GetxController {
-  // User info
   final userName = 'Donald'.obs;
   final avatarUrl = 'assets/images/avatar.png'.obs;
 
-  // Streak badge
   final streakCount = 0.obs;
 
-  // Level card
   final level = 12.obs;
   final currentXp = 8450.obs;
   final maxXp = 12000.obs;
@@ -20,11 +21,9 @@ class HomeController extends GetxController {
   double get xpProgress =>
       (currentXp.value / maxXp.value).clamp(0.0, 1.0);
 
-  // Stats
   final workoutCount = 24.obs;
   final goalProgress = 9.obs;
 
-  // Today's plan
   final todayWorkoutName = 'Upper Body Strength'.obs;
   final workoutDuration = 45.obs;
   final exerciseCount = 6.obs;
@@ -41,6 +40,17 @@ class HomeController extends GetxController {
   final fatLeft = 11.obs;
   final fatGLeft = 114.obs;
 
+
+
+  final todayExercises = <WorkoutExercise>[
+    const WorkoutExercise('Jumping Jacks', done: true),
+    const WorkoutExercise('Arm Circles'),
+    const WorkoutExercise('Leg Swings'),
+    const WorkoutExercise('Bodyweight Squats'),
+    const WorkoutExercise('Hip Circles'),
+    const WorkoutExercise('Torso Twists'),
+  ].obs;
+
   void onNotificationTap() {
     // TODO: navigate to notifications
   }
@@ -49,8 +59,20 @@ class HomeController extends GetxController {
 
     AppNavigation.push( ProfileScreen(),context: cotext);
   }
-
-  void onStartWorkout() {
-    // TODO: navigate to workout detail
+  void onStartWorkout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => WorkoutPreviewDialog(
+        workoutName: todayWorkoutName.value,
+        duration: workoutDuration.value,
+        exerciseCount: exerciseCount.value,
+        xp: workoutXp.value,
+        exercises: todayExercises,
+        onStart: () {
+          Navigator.of(dialogContext).pop();
+          Get.find<BaseController>().onTabSelected(1);
+        },
+      ),
+    );
   }
 }

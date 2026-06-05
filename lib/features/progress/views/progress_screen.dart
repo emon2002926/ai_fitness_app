@@ -23,10 +23,9 @@ class ProgressScreen extends StatelessWidget {
         showBackButton: false,
         showNotification: true,
         onNotificationPressed: controller.onNotificationPressed,
-        avatarUrl: controller.avatarUrl.value.isEmpty
-            ? null
-            : controller.avatarUrl.value,
-        onAvatarPressed: controller.onAvatarPressed,
+
+        avatarUrl: 'assets/images/avatar.png',
+
       ),
       body: SafeArea(
         child: SingleChildScrollView(

@@ -35,10 +35,10 @@ class CookingStepsController extends GetxController {
   final isFavorite = false.obs;
 
   final ingredients = <Ingredient>[
-    const Ingredient(name: 'Orange', amount: '500g', image: 'assets/images/ing_orange.png'),
-    const Ingredient(name: 'Lettuce', amount: '500g', image: 'assets/images/ing_lettuce.png'),
-    const Ingredient(name: 'Cucumbers', amount: '500g', image: 'assets/images/ing_cucumber.png'),
-    const Ingredient(name: 'Tomato', amount: '500g', image: 'assets/images/ing_tomato.png'),
+    const Ingredient(name: 'Orange', amount: '500g', image: 'assets/images/orange.png'),
+    const Ingredient(name: 'Lettuce', amount: '500g', image: 'assets/images/cabige.png'),
+    const Ingredient(name: 'Cucumbers', amount: '500g', image: 'assets/images/cucumber.png'),
+    const Ingredient(name: 'Tomato', amount: '500g', image: 'assets/images/tomato.png'),
   ];
 
   final steps = <CookingStep>[

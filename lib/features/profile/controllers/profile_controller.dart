@@ -1,4 +1,5 @@
 import 'package:ai_fitness_app/core/util/app_navigation.dart';
+import 'package:ai_fitness_app/features/auth/views/sign_in_screen.dart';
 import 'package:ai_fitness_app/features/profile/widgets/edit_age_screen.dart';
 import 'package:ai_fitness_app/features/profile/widgets/edit_diet_screen.dart';
 import 'package:ai_fitness_app/features/profile/widgets/edit_goal_screen.dart';
@@ -55,9 +56,8 @@ class ProfileController extends GetxController {
     );
   }
   void onTermsAndConditions(BuildContext context ) {
-    AppNavigation.push(
-       TermsConditionsScreen(),
-      context: context
+    AppNavigation.pushAndClear(
+       SignInScreen(),
     );
   }
 

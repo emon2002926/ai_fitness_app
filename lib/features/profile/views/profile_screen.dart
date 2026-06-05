@@ -24,7 +24,6 @@ class ProfileScreen extends StatelessWidget {
         avatarUrl: controller.avatarUrl.value.isEmpty
             ? null
             : controller.avatarUrl.value,
-        onAvatarPressed: controller.onAvatarPressed,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -398,6 +397,13 @@ class _SupportCard extends StatelessWidget {
         _DetailRow(
           icon: Icons.help_outline,
           label: 'Terms & Conditions',
+          onTap: (){controller.onTermsAndConditions(context);},
+          isLast: true,
+        ),
+        _Divider(),
+        _DetailRow(
+          icon: Icons.logout,
+          label: 'Log Out',
           onTap: (){controller.onTermsAndConditions(context);},
           isLast: true,
         ),

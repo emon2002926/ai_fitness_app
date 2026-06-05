@@ -40,7 +40,6 @@ class ExerciseTimerScreen extends StatelessWidget {
         showNotification: true,
         avatarUrl: 'assets/images/avatar.png',
         onNotificationPressed: () {},
-        onAvatarPressed: () {},
       ),
       body: SafeArea(
         child: Padding(
