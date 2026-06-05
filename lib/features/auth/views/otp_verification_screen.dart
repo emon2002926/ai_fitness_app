@@ -166,7 +166,7 @@ class _OtpBox extends StatelessWidget {
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         style: GoogleFonts.nunito(
-          fontSize: context.sp(22),
+          fontSize: context.sp(16),
           fontWeight: FontWeight.w700,
           color: Colors.white,
         ),

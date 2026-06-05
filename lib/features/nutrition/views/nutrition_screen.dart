@@ -62,7 +62,7 @@ class _WeekDayPicker extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           padding: EdgeInsets.symmetric(horizontal: context.w(20)),
           itemCount: controller.days.length,
-          separatorBuilder: (_, __) => SizedBox(width: context.w(10)),
+          separatorBuilder: (_, _) => SizedBox(width: context.w(10)),
           itemBuilder: (context, index) {
             final day = controller.days[index];
             final isSelected = selectedIndex == index;  // ✅ use local variable
@@ -243,7 +243,7 @@ class _MealCard extends StatelessWidget {
 
 
 class PremiumBottomSheet extends StatelessWidget {
-  const PremiumBottomSheet();
+  const PremiumBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {

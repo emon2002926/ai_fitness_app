@@ -1,11 +1,9 @@
 import 'package:ai_fitness_app/core/util/app_navigation.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../base_screen/controllers/base_controller.dart';
 import '../../profile/views/profile_screen.dart';
-import '../../work_out/views/work_out_screen.dart';
 import '../widgets/workout_preview_dialog.dart';
 
 class HomeController extends GetxController {

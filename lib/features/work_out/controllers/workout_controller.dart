@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/util/app_navigation.dart';
-import '../../base_screen/controllers/base_controller.dart';
 import '../views/exercise_timer_screen.dart';
 
 class WorkoutController extends GetxController {

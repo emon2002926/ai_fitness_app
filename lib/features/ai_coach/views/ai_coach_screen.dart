@@ -307,7 +307,7 @@ class _TypingIndicatorState extends State<_TypingIndicator>
               children: List.generate(3, (i) {
                 return AnimatedBuilder(
                   animation: _animController,
-                  builder: (_, __) {
+                  builder: (_, _) {
                     final delay = i * 0.3;
                     final value = ((_animation.value - delay).clamp(0.0, 1.0));
                     return Container(

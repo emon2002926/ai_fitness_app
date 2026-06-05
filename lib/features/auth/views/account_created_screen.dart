@@ -1,6 +1,4 @@
-import 'package:ai_fitness_app/features/auth/views/sign_in_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../../core/constants/app_assert_image.dart';
 import '../../../core/util/app_navigation.dart';

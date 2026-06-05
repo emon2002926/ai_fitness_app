@@ -55,8 +55,12 @@ class OtpVerificationController extends GetxController {
 
   @override
   void onClose() {
-    for (final c in otpControllers) c.dispose();
-    for (final f in focusNodes) f.dispose();
+    for (final c in otpControllers) {
+      c.dispose();
+    }
+    for (final f in focusNodes) {
+      f.dispose();
+    }
     super.onClose();
   }
 }

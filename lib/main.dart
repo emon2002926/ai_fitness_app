@@ -1,4 +1,3 @@
-import 'package:ai_fitness_app/features/base_screen/views/base_page.dart';
 import 'package:ai_fitness_app/features/onboarding/views/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,8 +24,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       navigatorKey: AppNavigation.navigatorKey,
 
-      // home: const OnboardingScreen(),
-      home: const BasePage(),
+      home: const OnboardingScreen(),
+      // home: const BasePage(),
     );
   }
 }

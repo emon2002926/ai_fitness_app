@@ -1,5 +1,4 @@
 import '../../../core/util/app_navigation.dart';
-import '../../../core/widgets/snakbar/custom_snackbar.dart';
 import '../views/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

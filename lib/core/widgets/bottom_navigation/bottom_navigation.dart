@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../util/screen_size.dart';
 
 
-import '../text/app_text.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;

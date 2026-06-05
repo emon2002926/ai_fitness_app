@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/util/screen_size.dart';
@@ -9,7 +8,7 @@ class EditableValueBox extends StatelessWidget {
   final TextEditingController controller;
   final String unit;
 
-  const EditableValueBox({required this.controller, required this.unit});
+  const EditableValueBox({super.key, required this.controller, required this.unit});
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +63,7 @@ class UnitToggle extends StatelessWidget {
   final String selected;
   final ValueChanged<String> onChanged;
 
-  const UnitToggle({
+  const UnitToggle({super.key, 
     required this.leftLabel,
     required this.rightLabel,
     required this.selected,

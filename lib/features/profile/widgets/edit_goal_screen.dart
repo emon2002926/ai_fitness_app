@@ -5,8 +5,6 @@ import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/text/app_text.dart';
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class GoalOption {
   final String emoji;
@@ -30,11 +28,11 @@ class EditGoalController extends GetxController {
     selectedGoal.value = goal;
   }
 
-  Future<void> save() async {
+  Future<void> save(BuildContext context) async {
     isLoading.value = true;
     await Future.delayed(const Duration(milliseconds: 800));
     isLoading.value = false;
-    Get.back();
+    Navigator.pop(context);
   }
 }
 
@@ -83,7 +81,7 @@ class EditGoalScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: context.w(20)),
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: controller.goals.length,
-                separatorBuilder: (_, __) => SizedBox(height: context.h(14)),
+                separatorBuilder: (_, _) => SizedBox(height: context.h(14)),
                 itemBuilder: (context, index) {
                   final option = controller.goals[index];
                   return Obx(() => _SelectionCard(
@@ -102,7 +100,7 @@ class EditGoalScreen extends StatelessWidget {
               ),
               child: Obx(() => AppButton(
                 buttonText: 'SAVE',
-                onPressed: controller.save,
+                onPressed: (){controller.save(context);},
                 fillColor: const Color(0xFFF5A623),
                 textColor: Colors.white,
                 fontSize: 16,

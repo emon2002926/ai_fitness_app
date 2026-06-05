@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../core/util/screen_size.dart';
@@ -28,11 +27,11 @@ class EditAgeController extends GetxController {
     selectedAge.value = minAge + index;
   }
 
-  Future<void> save() async {
+  Future<void> save(BuildContext context) async {
     isLoading.value = true;
     await Future.delayed(const Duration(milliseconds: 800));
     isLoading.value = false;
-    Get.back();
+    Navigator.pop(context);
   }
 
   @override
@@ -139,7 +138,7 @@ class EditAgeScreen extends StatelessWidget {
               ),
               child: Obx(() => AppButton(
                 buttonText: 'SAVE',
-                onPressed: controller.save,
+                onPressed:() {controller.save(context);},
                 fillColor: const Color(0xFFF5A623),
                 textColor: Colors.white,
                 fontSize: 16,

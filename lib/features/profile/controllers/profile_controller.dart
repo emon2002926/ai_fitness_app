@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 
 import '../views/privacy_policy_screen.dart';
 import '../views/support_legal_screen.dart';
-import '../views/terms_conditions_screen.dart';
 import '../widgets/edit_weight_screen.dart';
 
 class ProfileController extends GetxController {

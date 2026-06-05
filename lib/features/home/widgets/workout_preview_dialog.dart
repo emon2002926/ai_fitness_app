@@ -1,10 +1,8 @@
-import 'dart:ui';
 
 import '../../../core/constants/app_assert_image.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../../core/widgets/text/app_text.dart';
 class WorkoutPreviewDialog extends StatelessWidget {

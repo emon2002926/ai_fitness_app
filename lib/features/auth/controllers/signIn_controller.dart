@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 import '../../../core/services/api/services/api_services.dart';
 import '../../../core/util/app_navigation.dart';
-import '../../onboarding/views/user_info_screen.dart';
 import '../views/sign_up_screen.dart';
 class SignInController extends GetxController {
   final emailController = TextEditingController();
@@ -38,8 +37,8 @@ class SignInController extends GetxController {
 
   Future<void> login() async {
 
-    // AppNavigation.pushAndClear(BasePage());
-    AppNavigation.pushAndClear(UserInfoScreen());
+    AppNavigation.pushAndClear(BasePage());
+    // AppNavigation.pushAndClear(UserInfoScreen());
 
 
 

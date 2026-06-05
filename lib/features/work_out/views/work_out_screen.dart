@@ -1,5 +1,3 @@
-import 'package:ai_fitness_app/core/util/app_navigation.dart';
-import 'package:ai_fitness_app/features/profile/views/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/util/screen_size.dart';
@@ -140,7 +138,7 @@ class _WeekDayPicker extends StatelessWidget {
       child:  ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: controller.days.length,
-        separatorBuilder: (_, __) => SizedBox(width: context.w(10)),
+        separatorBuilder: (_, _) => SizedBox(width: context.w(10)),
         itemBuilder: (context, index) {
           final day = controller.days[index];
           final isSelected = controller.selectedDayIndex.value == index;

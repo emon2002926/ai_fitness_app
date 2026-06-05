@@ -5,24 +5,20 @@ import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/text/app_text.dart';
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../views/shared_widgets.dart';
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class EditWeightController extends GetxController {
   final weightUnit = 'KG'.obs;
   final weightController = TextEditingController(text: '62');
   final isLoading = false.obs;
 
-  Future<void> save() async {
+  Future<void> save(BuildContext context) async {
     isLoading.value = true;
     await Future.delayed(const Duration(milliseconds: 800));
     isLoading.value = false;
-    Get.back();
+    Navigator.pop(context);
   }
 
   @override
@@ -99,7 +95,7 @@ class EditWeightScreen extends StatelessWidget {
               ),
               child: Obx(() => AppButton(
                 buttonText: 'SAVE',
-                onPressed: controller.save,
+                onPressed: (){controller.save(context);},
                 fillColor: const Color(0xFFF5A623),
                 textColor: Colors.white,
                 fontSize: 16,

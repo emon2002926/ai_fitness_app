@@ -5,9 +5,6 @@ import '../../../core/constants/app_assert_image.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/app_bar/build_app_bar.dart';
 import '../../../core/widgets/text/app_text.dart';
-import '../controllers/levels_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 enum LevelState { completed, current, locked }
 
@@ -431,11 +428,11 @@ class _LevelNode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (item.state == LevelState.current) {
-      return Container(
+      return SizedBox(
         width: size,
         height: size,
 
-        child: Container(
+        child: SizedBox(
         width: size,
         height: size,
         child: Image.asset(
@@ -448,7 +445,7 @@ class _LevelNode extends StatelessWidget {
     }
 
     if (item.state == LevelState.completed) {
-      return Container(
+      return SizedBox(
         width: size,
         height: size,
         child: Image.asset(
@@ -459,7 +456,7 @@ class _LevelNode extends StatelessWidget {
       );
     }
 
-    return Container(
+    return SizedBox(
       width: size,
       height: size,
       child: Image.asset(

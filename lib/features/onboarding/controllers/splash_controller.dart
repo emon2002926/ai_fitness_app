@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:get/get.dart';
 import '../../../../core/util/storage_service.dart';
 import 'package:get_storage/get_storage.dart';
-import '../../../core/util/app_navigation.dart';
 
 class SplashController extends GetxController {
   final box = GetStorage();
