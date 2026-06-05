@@ -1,4 +1,15 @@
+import 'package:ai_fitness_app/core/util/app_navigation.dart';
+import 'package:ai_fitness_app/features/profile/widgets/edit_age_screen.dart';
+import 'package:ai_fitness_app/features/profile/widgets/edit_diet_screen.dart';
+import 'package:ai_fitness_app/features/profile/widgets/edit_goal_screen.dart';
+import 'package:ai_fitness_app/features/profile/widgets/edit_height_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+
+import '../views/privacy_policy_screen.dart';
+import '../views/support_legal_screen.dart';
+import '../views/terms_conditions_screen.dart';
+import '../widgets/edit_weight_screen.dart';
 
 class ProfileController extends GetxController {
   // Observables – replace with real data from your API/storage
@@ -25,20 +36,47 @@ class ProfileController extends GetxController {
 
   double get xpProgress => currentXp.value / maxXp.value;
 
-  void onNotificationPressed() {
-    // TODO: navigate to notifications
+  void onNotificationPressed() {}
+
+  void onAvatarPressed() {}
+
+  void onPersonalDetailTap(String field) {}
+
+  void onSupportAndLegal(BuildContext context) {
+    AppNavigation.push(
+      SupportLegalScreen(),
+      context: context
+    );
+  }
+  void onPrivacyPolicy(BuildContext context) {
+    AppNavigation.push(
+      PrivacyPolicyScreen(),
+      context: context
+    );
+  }
+  void onTermsAndConditions(BuildContext context ) {
+    AppNavigation.push(
+       TermsConditionsScreen(),
+      context: context
+    );
   }
 
-  void onAvatarPressed() {
-    // TODO: open full profile / edit
+  void currentWeightTap(BuildContext context) {
+    AppNavigation.push(EditWeightScreen(), context: context);
+  }
+  void heightTap(BuildContext context) {
+    AppNavigation.push(EditHeightScreen(), context: context);
+  }
+  void ageTap(BuildContext context) {
+    AppNavigation.push(EditAgeScreen(), context: context);
+  }
+  void goalTap(BuildContext context) {
+    AppNavigation.push(EditGoalScreen(), context: context);
+  }
+  void dietTap(BuildContext context) {
+    AppNavigation.push(EditDietScreen(), context: context);
   }
 
-  void onPersonalDetailTap(String field) {
-    // TODO: navigate to edit screen for each field
-  }
 
-  void onSupportAndLegal() {}
-  void onPrivacyPolicy() {}
-  void onTermsAndConditions() {}
 }
 

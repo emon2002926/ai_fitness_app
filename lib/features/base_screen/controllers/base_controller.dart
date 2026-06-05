@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../nutrition/controllers/nutrition_controller.dart';
+
 
 
 
@@ -37,13 +39,22 @@ class BaseController extends GetxController {
   void onTabSelected(int index) {
     final currentTime = DateTime.now().millisecondsSinceEpoch;
 
-    // Double-tap → pop to root of that tab
     if (index == currentIndex.value && currentTime - lastTapTime < 500) {
       keyForIndex(index).currentState?.popUntil((route) => route.isFirst);
     } else {
       currentIndex.value = index;
+
+      // Show premium sheet when user taps Nutrition tab
+      if (index == 3) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final nutritionController = Get.find<NutritionController>();
+          nutritionController.showPremiumSheetIfNeeded();
+        });
+      }
     }
 
     lastTapTime = currentTime;
   }
+
+
 }
