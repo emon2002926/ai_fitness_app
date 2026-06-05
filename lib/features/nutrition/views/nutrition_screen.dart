@@ -19,6 +19,7 @@ class NutritionScreen extends StatelessWidget {
       appBar: BuildAppBar(
         title: 'Nutrition',
         showNotification: true,
+        showBackButton: false,
         avatarUrl: 'assets/images/avatar.png',
         onNotificationPressed: () {},
         onAvatarPressed: () {},

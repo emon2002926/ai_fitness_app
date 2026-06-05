@@ -57,7 +57,7 @@ class LevelsScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: BuildAppBar(
         title: 'Levels',
-        showBackButton: true,
+        showBackButton: false,
         showNotification: true,
         onNotificationPressed: controller.onNotificationPressed,
         avatarUrl: controller.avatarUrl.value.isEmpty
@@ -65,18 +65,20 @@ class LevelsScreen extends StatelessWidget {
             : controller.avatarUrl.value,
         onAvatarPressed: controller.onAvatarPressed,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
-          horizontal: context.w(20),
-          vertical: context.h(20),
-        ),
-        child: Column(
-          children: [
-            _LevelProgressCard(controller: controller),
-            SizedBox(height: context.h(32)),
-            _LevelPath(controller: controller),
-            SizedBox(height: context.h(40)),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+            horizontal: context.w(20),
+            vertical: context.h(20),
+          ),
+          child: Column(
+            children: [
+              _LevelProgressCard(controller: controller),
+              SizedBox(height: context.h(32)),
+              _LevelPath(controller: controller),
+              SizedBox(height: context.h(40)),
+            ],
+          ),
         ),
       ),
     );
@@ -434,22 +436,16 @@ class _LevelNode extends StatelessWidget {
       return Container(
         width: size,
         height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white54, width: 4),
-        ),
+
         child: Container(
-          margin: const EdgeInsets.all(4),
-          decoration: const BoxDecoration(
-            color: Color(0xFFF5A623),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            Icons.star_rounded,
-            color: Colors.white,
-            size: size * 0.45,
-          ),
+        width: size,
+        height: size,
+        child: Image.asset(
+          "assets/images/star_icon.png",
+          width: size * 0.45,
+          height: size * 0.45,
         ),
+      )
       );
     }
 
@@ -457,14 +453,10 @@ class _LevelNode extends StatelessWidget {
       return Container(
         width: size,
         height: size,
-        decoration: const BoxDecoration(
-          color: Color(0xFFF5A623),
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          Icons.check_rounded,
-          color: Colors.white,
-          size: size * 0.5,
+        child: Image.asset(
+          "assets/images/check_icon.png",
+          width: size * 0.45,
+          height: size * 0.45,
         ),
       );
     }
@@ -472,14 +464,10 @@ class _LevelNode extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF5A623).withOpacity(0.35),
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        Icons.check_rounded,
-        color: Colors.white38,
-        size: size * 0.45,
+      child: Image.asset(
+        "assets/images/check_icon.png",
+        width: size * 0.45,
+        height: size * 0.45,
       ),
     );
   }

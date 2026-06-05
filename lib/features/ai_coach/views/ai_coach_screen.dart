@@ -63,19 +63,8 @@ class _AiCoachAppBar extends StatelessWidget implements PreferredSizeWidget {
             padding: EdgeInsets.symmetric(horizontal: context.w(16)),
             child: Row(
               children: [
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Container(
-                    width: context.w(40),
-                    height: context.w(40),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFF5A623),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
-                  ),
-                ),
-                SizedBox(width: context.w(12)),
+
+                SizedBox(width: context.w(42)),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

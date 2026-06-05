@@ -23,6 +23,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   image_picker:
   get: ^4.7.3
+  fl_chart: ^0.69.0
 #  flutter_localization:
 #  path_provider: ^2.1.2
   http_parser: ^4.0.2

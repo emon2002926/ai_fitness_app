@@ -20,6 +20,7 @@ class WorkOutScreen extends StatelessWidget {
       appBar: BuildAppBar(
         title: 'Workouts',
         showNotification: true,
+        showBackButton: false,
         avatarUrl: 'assets/images/avatar.png',
         onNotificationPressed: () {
         },
