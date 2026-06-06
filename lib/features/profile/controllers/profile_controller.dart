@@ -1,5 +1,6 @@
 import 'package:ai_fitness_app/core/util/app_navigation.dart';
 import 'package:ai_fitness_app/features/auth/views/sign_in_screen.dart';
+import 'package:ai_fitness_app/features/profile/views/terms_conditions_screen.dart';
 import 'package:ai_fitness_app/features/profile/widgets/edit_age_screen.dart';
 import 'package:ai_fitness_app/features/profile/widgets/edit_diet_screen.dart';
 import 'package:ai_fitness_app/features/profile/widgets/edit_goal_screen.dart';
@@ -12,9 +13,8 @@ import '../views/support_legal_screen.dart';
 import '../widgets/edit_weight_screen.dart';
 
 class ProfileController extends GetxController {
-  // Observables – replace with real data from your API/storage
   final userName = 'User'.obs;
-  final avatarUrl = ''.obs; // set to network URL when available
+  final avatarUrl = ''.obs;
   final isPremium = true.obs;
 
   // Level / XP
@@ -55,6 +55,13 @@ class ProfileController extends GetxController {
     );
   }
   void onTermsAndConditions(BuildContext context ) {
+    AppNavigation.push(
+       TermsConditionsScreen(),
+      context: context
+    );
+  }
+
+  void onLogOut(BuildContext context ) {
     AppNavigation.pushAndClear(
        SignInScreen(),
     );

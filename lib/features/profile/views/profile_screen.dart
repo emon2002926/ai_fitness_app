@@ -404,7 +404,7 @@ class _SupportCard extends StatelessWidget {
         _DetailRow(
           icon: Icons.logout,
           label: 'Log Out',
-          onTap: (){controller.onTermsAndConditions(context);},
+          onTap: (){controller.onLogOut(context);},
           isLast: true,
         ),
       ],

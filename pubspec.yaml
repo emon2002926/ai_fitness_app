@@ -7,7 +7,9 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.11.5
+  sdk: ^3.10.1
+
+#  sdk: ^3.11.5
 
 
 dependencies:
@@ -16,7 +18,6 @@ dependencies:
 
 
   cupertino_icons: ^1.0.8
-
   google_fonts: ^8.0.1
   http: ^1.6.0
   get_storage: ^2.1.1
@@ -24,15 +25,8 @@ dependencies:
   image_picker:
   get: ^4.7.3
   fl_chart: ^0.69.0
-#  flutter_localization:
-#  path_provider: ^2.1.2
   http_parser: ^4.0.2
-#  record: ^6.2.0
-#  just_audio: ^0.9.40
-#  flutter_math_fork: ^0.7.2
-#  lottie: ^3.1.0
-#  mobile_scanner: ^5.2.3
-#  url_launcher: ^6.3.0
+
 
 
 dev_dependencies:
