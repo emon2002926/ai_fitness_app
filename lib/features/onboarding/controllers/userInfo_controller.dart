@@ -9,7 +9,7 @@ class UserInfoController extends GetxController {
   final pageController = PageController();
   final currentStep = 0.obs;
 
-  static const int totalSteps = 8;
+  static const int totalSteps = 9;
 
   // Step 0 - Age
   final selectedAge = 19.obs;
@@ -64,7 +64,16 @@ class UserInfoController extends GetxController {
     {'emoji': '🌅', 'label': 'Morning'},
     {'emoji': '⛅', 'label': 'Afternoon'},
     {'emoji': '🌆', 'label': 'Evening'},
-    {'emoji': '⛅', 'label': 'Flexible'},
+    {'emoji': '🔄', 'label': 'Flexible'},
+  ];
+
+  // Step 8 - Mascot
+  final selectedMascot = ''.obs;
+  final mascots = [
+    {'image': 'assets/images/mascot_lion.png',     'label': 'Leo the Lion'},
+    {'image': 'assets/images/mascot_tiger.png',    'label': 'Tory the Tiger'},
+    {'image': 'assets/images/mascot_dog.png',      'label': 'Goldie the Pup'},
+    {'image': 'assets/images/mascot_elephant.png', 'label': 'Ellie the Elephant'},
   ];
 
   double get progress => (currentStep.value + 1) / totalSteps;
@@ -96,9 +105,19 @@ class UserInfoController extends GetxController {
 
   bool _validateCurrentStep() {
     switch (currentStep.value) {
+      case 1:
+        if (double.tryParse(weightController.text.trim()) == null) {
+          CustomSnackBar.error('Please enter a valid weight.');
+          return false;
+        }
       case 2:
         if (selectedGender.value.isEmpty) {
           CustomSnackBar.error('Please select your gender.');
+          return false;
+        }
+      case 3:
+        if (double.tryParse(heightController.text.trim()) == null) {
+          CustomSnackBar.error('Please enter a valid height.');
           return false;
         }
       case 4:
@@ -121,12 +140,17 @@ class UserInfoController extends GetxController {
           CustomSnackBar.error('Please select your workout time.');
           return false;
         }
+      case 8:
+        if (selectedMascot.value.isEmpty) {
+          CustomSnackBar.error('Please choose your mascot.');
+          return false;
+        }
     }
     return true;
   }
 
   void _submitAndNavigate() {
-    // TODO: call API with all collected data
+    // TODO: call API with all collected data, including selectedMascot.value
     AppNavigation.push(PlanReadyScreen(
       calories: _calculateCalories(),
       protein: _calculateProtein(),

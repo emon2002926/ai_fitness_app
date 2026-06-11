@@ -19,7 +19,6 @@ class UserInfoScreen extends GetView<UserInfoController> {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Fixed Header ──────────────────────────────────────
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: context.w(24),
@@ -55,7 +54,6 @@ class UserInfoScreen extends GetView<UserInfoController> {
               ),
             ),
 
-            // ── Scrollable Steps ──────────────────────────────────
             Expanded(
               child: PageView(
                 controller: controller.pageController,
@@ -70,11 +68,11 @@ class UserInfoScreen extends GetView<UserInfoController> {
                   _GoalStep(),
                   _ActivityStep(),
                   _WorkoutTimeStep(),
+                  _MascotStep(), // new
                 ],
               ),
             ),
 
-            // ── Fixed Bottom Button ───────────────────────────────
             Padding(
               padding: EdgeInsets.fromLTRB(
                 context.w(24),
@@ -98,7 +96,6 @@ class UserInfoScreen extends GetView<UserInfoController> {
   }
 }
 
-// ── Shared Widgets ──────────────────────────────────────────────────────────
 
 class _StepTitle extends StatelessWidget {
   final String title;
@@ -619,6 +616,139 @@ class _WorkoutTimeStep extends StatelessWidget {
                 .toList(),
           )),
         ],
+      ),
+    );
+  }
+}
+
+// ── Step 8: Mascot ───────────────────────────────────────────────────────────
+
+// ── Step 8: Mascot ───────────────────────────────────────────────────────────
+
+class _MascotStep extends StatelessWidget {
+  const _MascotStep();
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<UserInfoController>();
+
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: context.w(24)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: context.h(32)),
+          _StepTitle('Choose your workout buddy!'),
+          SizedBox(height: context.h(32)),
+          Obx(() {
+            final selected = controller.selectedMascot.value;
+
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: context.h(12),
+                crossAxisSpacing: context.w(12),
+                childAspectRatio: 0.78,
+              ),
+              itemCount: controller.mascots.length,
+              itemBuilder: (context, index) {
+                final m = controller.mascots[index];
+                return _MascotTile(
+                  image: m['image']!,
+                  label: m['label']!,
+                  isSelected: selected == m['label'],
+                  onTap: () => controller.selectedMascot.value = m['label']!,
+                );
+              },
+            );
+          }),
+          SizedBox(height: context.h(16)),
+        ],
+      ),
+    );
+  }
+}
+
+class _MascotTile extends StatelessWidget {
+  final String image;
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _MascotTile({
+    required this.image,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: EdgeInsets.all(context.w(12)),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A1A),
+          borderRadius: BorderRadius.circular(context.w(14)),
+          border: Border(
+            top: BorderSide(
+              color: isSelected ? const Color(0xFFF5A623) : const Color(0xFF6b6b6b),
+              width: 1.0,
+            ),
+            bottom: BorderSide(
+              color: isSelected ? const Color(0xFFF5A623) : const Color(0xFF6b6b6b),
+              width: isSelected ? 5.0 : 1.0,
+            ),
+            left: BorderSide(
+              color: isSelected ? const Color(0xFFF5A623) : const Color(0xFF6b6b6b),
+              width: 1.0,
+            ),
+            right: BorderSide(
+              color: isSelected ? const Color(0xFFF5A623) : const Color(0xFF6b6b6b),
+              width: 1.0,
+            ),
+          ),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Image.asset(image, fit: BoxFit.contain),
+            ),
+            SizedBox(height: context.h(8)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: AppText(
+                    data: label,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    maxLines: 1,
+                  ),
+                ),
+                SizedBox(width: context.w(8)),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: context.w(18),
+                  height: context.w(18),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isSelected ? const Color(0xFFF5A623) : Colors.transparent,
+                    border: Border.all(
+                      color: isSelected ? const Color(0xFFF5A623) : Colors.white38,
+                      width: 1.5,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
