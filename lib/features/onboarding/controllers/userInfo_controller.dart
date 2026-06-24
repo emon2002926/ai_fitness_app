@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
+import '../../../core/constants/app_constant.dart';
+import '../../../core/util/app_log.dart';
 import '../../../core/util/app_navigation.dart';
+import '../../../core/util/storage_service.dart';
 import '../../../core/widgets/snakbar/custom_snackbar.dart';
 import '../views/plan_ready_screen.dart';
 
@@ -149,14 +155,50 @@ class UserInfoController extends GetxController {
     return true;
   }
 
-  void _submitAndNavigate() {
-    // TODO: call API with all collected data, including selectedMascot.value
-    AppNavigation.push(PlanReadyScreen(
-      calories: _calculateCalories(),
-      protein: _calculateProtein(),
-    ));
-  }
+  Future<void> _submitAndNavigate() async {
+    const endpoint = AppConstant.onboardingEndpoint;
 
+    final body = {
+      'age': selectedAge.value,
+      'weight': weightController.text.trim(),
+      'height': heightController.text.trim(),
+      'gender': selectedGender.value,
+      'diet': selectedDiet.value,
+      'primary_goal': selectedGoal.value,
+      'workout_time': selectedWorkoutTime.value,
+    };
+
+    try {
+      AppLog.request(endpoint, body: body);
+
+      final response = await http.post(
+        Uri.parse(endpoint),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${StorageService.accessToken}',
+        },
+        body: jsonEncode(body),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        AppLog.response(endpoint, data);
+
+        AppNavigation.push(PlanReadyScreen(
+          calories: _calculateCalories(),
+          protein: _calculateProtein(),
+        ));
+      } else {
+        AppLog.error(endpoint, data, statusCode: response.statusCode);
+        final message = data['detail'] ?? data['message'] ?? 'Failed to save onboarding data';
+        CustomSnackBar.error(message);
+      }
+    } catch (e) {
+      AppLog.error(endpoint, e.toString());
+      CustomSnackBar.error('Something went wrong. Please try again.');
+    }
+  }
   int _calculateCalories() => 2150;
   int _calculateProtein() => 180;
 

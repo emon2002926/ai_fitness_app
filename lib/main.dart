@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'core/bindings/app_bindings.dart';
 import 'core/services/api/services/api_services.dart';
 import 'core/util/app_navigation.dart';
-import 'features/auth/views/account_created_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       navigatorKey: AppNavigation.navigatorKey,
 
-      // home: const OnboardingScreen(),
-      home: const AccountCreatedScreen(),
+      home: const OnboardingScreen(),
       // home: const BasePage(),
     );
   }
