@@ -1,5 +1,7 @@
 
 
+import 'package:ai_fitness_app/features/auth/bindings/auth_binding.dart';
+
 import '../../features/base_screen/binding/base_binding.dart';
 
 class AppBindings {
@@ -7,6 +9,8 @@ class AppBindings {
   static void init() {
     // SignInBinding.dependencies();
     BaseBinding.dependencies();
+    AuthBindings.signInDependencies();
+    AuthBindings.otpVerificationDependencies();
     // AuthBindings.signInDependencies();
     // AuthBindings.signUpDependencies();
     //

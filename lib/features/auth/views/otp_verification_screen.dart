@@ -21,10 +21,7 @@ class OtpVerificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(OtpVerificationController(
-      email: email,
-      isFromSignUp: isFromSignUp,
-    ));
+    final controller = Get.find<OtpVerificationController>();
 
     final maskedEmail = _maskEmail(email);
 
@@ -81,7 +78,7 @@ class OtpVerificationScreen extends StatelessWidget {
 
                   Obx(() => AppButton(
                     buttonText: 'Verify Code',
-                    onPressed: controller.verifyCode,
+                    onPressed:() {controller.verifyCode(email, isFromSignUp);},
                     fillColor: const Color(0xFFF5A623),
                     textColor: Colors.white,
                     fontSize: 16,
@@ -94,7 +91,9 @@ class OtpVerificationScreen extends StatelessWidget {
                   SizedBox(height: context.h(24)),
 
                   GestureDetector(
-                    onTap: controller.resendOtp,
+                    onTap:() {
+                      controller.resendOtp(email);
+                    },
                     child: RichText(
                       text: TextSpan(
                         style: GoogleFonts.nunito(

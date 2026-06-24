@@ -1,13 +1,15 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
+import '../../../core/constants/app_constant.dart';
+import '../../../core/util/app_log.dart';
 import '../../../core/util/app_navigation.dart';
+import '../../../core/widgets/snakbar/custom_snackbar.dart';
 import '../views/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 class ResetPasswordController extends GetxController {
-  final String email;
-  final String otp;
-
-  ResetPasswordController({required this.email, required this.otp});
-
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final passwordFocus = FocusNode();
@@ -37,19 +39,48 @@ class ResetPasswordController extends GetxController {
     return null;
   }
 
-  Future<void> updatePassword() async {
-    // if (!formKey.currentState!.validate()) return;
-    //
-    // isLoading.value = true;
-    // try {
-    //   // TODO: call API
-    //   await Future.delayed(const Duration(seconds: 1));
-    //
-    //   CustomSnackBar.success('Password updated successfully!');
-      AppNavigation.push(SignInScreen());
-    // } finally {
-    //   isLoading.value = false;
-    // }
+  Future<void> updatePassword(String email) async {
+    if (!formKey.currentState!.validate()) return;
+
+    isLoading.value = true;
+
+    final endpoint = AppConstant.setNewPasswordEndpoint;
+    final body = {
+      'email': email,
+      'password': passwordController.text,
+      'confirm_password': confirmPasswordController.text,
+    };
+
+    try {
+      AppLog.request(endpoint, body: body);
+
+      final response = await http.post(
+        Uri.parse(endpoint),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        AppLog.response(endpoint, data);
+
+        CustomSnackBar.success(data['message'] ?? 'Password updated successfully!');
+        await Future.delayed(const Duration(milliseconds: 800));
+        // AppNavigation.pushAndClear(SignInScreen());
+        Get.offAll(SignInScreen());
+      } else {
+        AppLog.error(endpoint, data, statusCode: response.statusCode);
+
+        final message = data['detail'] ?? data['message'] ?? 'Failed to reset password';
+        CustomSnackBar.error(message);
+      }
+    } catch (e) {
+      AppLog.error(endpoint, e.toString());
+      CustomSnackBar.error('Something went wrong. Please try again.');
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   @override

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +22,7 @@ class ResetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ResetPasswordController(email: email, otp: otp));
+    final controller = Get.put(ResetPasswordController());
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -100,7 +102,9 @@ class ResetPasswordScreen extends StatelessWidget {
 
                     Obx(() => AppButton(
                       buttonText: 'Update Password',
-                      onPressed: controller.updatePassword,
+                      onPressed: () {
+                        controller.updatePassword(email);
+                      },
                       fillColor: const Color(0xFFF5A623),
                       textColor: Colors.white,
                       fontSize: 16,

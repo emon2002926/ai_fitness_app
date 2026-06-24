@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
+import '../../../core/constants/app_constant.dart';
 import '../../../core/services/api/services/api_services.dart';
+import '../../../core/util/app_log.dart';
 import '../../../core/util/app_navigation.dart';
+import '../../../core/widgets/snakbar/custom_snackbar.dart';
 import '../views/otp_verification_screen.dart';
 import '../views/sign_in_screen.dart';
 
@@ -66,42 +72,50 @@ class SignUpController extends GetxController {
   }
 
   Future<void> signUp() async {
-    AppNavigation.push(OtpVerificationScreen(email: "",isFromSignUp: true,));
+    if (!formKey.currentState!.validate()) return;
 
-        // if (!formKey.currentState!.validate()) return;
-    //
-    // isLoading.value = true;
-    // try {
-    //   final raw = await _api.post(
-    //     '/auth/user/signup',
-    //     body: {
-    //       'name': fullNameController.text.trim(),
-    //       'email': emailController.text.trim(),
-    //       'mobile': mobileController.text.trim(),
-    //       'password': passwordController.text.trim(),
-    //     },
-    //   );
-    //
-    //   final response = SignUpResponseModel.fromJson(raw);
-    //
-    //   if (response.data == null) {
-    //     CustomSnackBar.error('Registration failed. Please try again.');
-    //     return;
-    //   }
-    //
-    //   CustomSnackBar.success('Account created! Please verify your email.');
-    //   await Future.delayed(const Duration(milliseconds: 500));
-    //   AppNavigation.push(OtpVerificationScreen(
-    //     email: emailController.text.trim(),
-    //     isFromSignUp: true,
-    //   ));
-    // } on HttpException catch (e) {
-    //   CustomSnackBar.error(e.message);
-    // } finally {
-    //   isLoading.value = false;
-    // }
+    isLoading.value = true;
+
+    const endpoint = AppConstant.signUpEndpoint;
+    final body = {
+      'email': emailController.text.trim(),
+      'full_name': fullNameController.text.trim(),
+      'phone_number': mobileController.text.trim(),
+      'password': passwordController.text,
+    };
+
+    try {
+      AppLog.request(endpoint, body: body);
+
+      final response = await http.post(
+        Uri.parse(endpoint),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        AppLog.response(endpoint, data);
+
+        CustomSnackBar.success(data['message'] ?? 'Account created! Please verify your email.');
+        AppNavigation.push(OtpVerificationScreen(
+          email: emailController.text.trim(),
+          isFromSignUp: true,
+        ));
+      } else {
+        AppLog.error(endpoint, data, statusCode: response.statusCode);
+
+        final message = data['detail'] ?? data['message'] ?? 'Registration failed';
+        CustomSnackBar.error(message);
+      }
+    } catch (e) {
+      AppLog.error(endpoint, e.toString());
+      CustomSnackBar.error('Something went wrong. Please try again.');
+    } finally {
+      isLoading.value = false;
+    }
   }
-
   void navigateToSignIn() => AppNavigation.push(SignInScreen());
 
   @override
