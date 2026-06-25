@@ -186,8 +186,6 @@ class UserInfoController extends GetxController {
         AppLog.response(endpoint, data);
 
         AppNavigation.push(PlanReadyScreen(
-          calories: _calculateCalories(),
-          protein: _calculateProtein(),
         ));
       } else {
         AppLog.error(endpoint, data, statusCode: response.statusCode);

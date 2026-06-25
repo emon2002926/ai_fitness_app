@@ -8,21 +8,16 @@ import 'package:get/get.dart';
 
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/text/app_text.dart';
+import '../controllers/PlanReadyController.dart';
 
 
 class PlanReadyScreen extends StatelessWidget {
-
-  final int calories;
-  final int protein;
-
-  const PlanReadyScreen({
-    super.key,
-    required this.calories,
-    required this.protein,
-  });
+  const PlanReadyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(PlanReadyController());
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -64,55 +59,76 @@ class PlanReadyScreen extends StatelessWidget {
             ),
 
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('🎉', style: TextStyle(fontSize: context.sp(80))),
-                  SizedBox(height: context.h(24)),
-                  AppText(
-                    data: 'Your Plan is Ready',
-                    fontSize: 28,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: context.h(8)),
-                  AppText(
-                    data: 'AI-calculated daily targets',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white54,
-                  ),
-                  SizedBox(height: context.h(40)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: context.w(24)),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: _PlanCard(
-                            emoji: '🔥',
-                            label: 'Calories',
-                            value: '$calories',
-                            unit: 'kcal',
-                          ),
-                        ),
-                        SizedBox(width: context.w(16)),
-                        Expanded(
-                          child: _PlanCard(
-                            emoji: '🥩',
-                            label: 'Protein',
-                            value: '$protein',
-                            unit: 'gm',
-                          ),
-                        ),
-                      ],
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircularProgressIndicator(color: Color(0xFFF5A623)),
+                      SizedBox(height: context.h(24)),
+                      Obx(() => AppText(
+                        data: controller.statusMessage.value,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white60,
+                        textAlign: TextAlign.center,
+                      )),
+                    ],
+                  );
+                }
+
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('🎉', style: TextStyle(fontSize: context.sp(80))),
+                    SizedBox(height: context.h(24)),
+                    AppText(
+                      data: 'Your Plan is Ready',
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                ],
-              ),
+                    SizedBox(height: context.h(8)),
+                    AppText(
+                      data: 'AI-calculated daily targets',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white54,
+                    ),
+                    SizedBox(height: context.h(40)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: context.w(24)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _PlanCard(
+                              emoji: '🔥',
+                              label: 'Calories',
+                              value: '${controller.calories.value}',
+                              unit: 'kcal',
+                            ),
+                          ),
+                          SizedBox(width: context.w(16)),
+                          Expanded(
+                            child: _PlanCard(
+                              emoji: '🥩',
+                              label: 'Protein',
+                              value: '${controller.protein.value}',
+                              unit: 'gm',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }),
             ),
 
-            Padding(
+            Obx(() => controller.isLoading.value
+                ? const SizedBox.shrink()
+                : Padding(
               padding: EdgeInsets.fromLTRB(
                 context.w(24),
                 context.h(8),
@@ -121,23 +137,19 @@ class PlanReadyScreen extends StatelessWidget {
               ),
               child: AppButton(
                 buttonText: 'CONTINUE',
-                onPressed: () {
-                  // TODO: Navigate to main home screen
-                  AppNavigation.push(const BasePage());
-                },
+                onPressed: () => AppNavigation.pushAndClear(const BasePage()),
                 fillColor: const Color(0xFFF5A623),
                 textColor: Colors.white,
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
               ),
-            ),
+            )),
           ],
         ),
       ),
     );
   }
 }
-
 class _PlanCard extends StatelessWidget {
   final String emoji;
   final String label;

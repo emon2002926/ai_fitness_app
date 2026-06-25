@@ -30,7 +30,7 @@ class OtpVerificationController extends GetxController {
     }
   }
 
-  Future<void> verifyCode( String email, bool isFromSignUp) async {
+  Future<void> verifyCode(String email, bool isFromSignUp) async {
     if (otp.length < 6) {
       CustomSnackBar.error('Please enter the complete 6-digit code.');
       return;
@@ -61,6 +61,8 @@ class OtpVerificationController extends GetxController {
         if (isFromSignUp) {
           await StorageService.saveToken(data['access']);
           await StorageService.saveRefreshToken(data['refresh']);
+          await Future.delayed(const Duration(milliseconds: 100));
+          AppLog.info('Token saved: ${StorageService.accessToken}');
           AppNavigation.push(AccountCreatedScreen());
         } else {
           AppNavigation.push(ResetPasswordScreen(email: email, otp: otp));

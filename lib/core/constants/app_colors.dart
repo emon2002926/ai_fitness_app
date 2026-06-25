@@ -82,7 +82,6 @@ class AppColors {
 ////////////////title color
 //   final Color titleTextColor = const Color(0xFFF6CB81);
 
-
   ////////////////Auth Screen Color
   final Color welcomeTextColor = const Color(0xFF333333);
   final Color labelTextColor = const Color(0xFF000000);

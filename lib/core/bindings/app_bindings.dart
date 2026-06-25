@@ -13,7 +13,7 @@ class AppBindings {
     AuthBindings.otpVerificationDependencies();
     // AuthBindings.signInDependencies();
     // AuthBindings.signUpDependencies();
-    //
+
     // AuthBindings.forgotPassDependencies();
     // AuthBindings.otpVerificationDependencies();
     // AuthBindings.resetPassDependencies();

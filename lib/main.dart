@@ -1,8 +1,6 @@
-import 'package:ai_fitness_app/core/constants/app_constant.dart';
 import 'package:ai_fitness_app/features/onboarding/views/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'core/bindings/app_bindings.dart';
 import 'core/services/api/services/api_services.dart';
 import 'core/util/app_navigation.dart';
@@ -12,6 +10,7 @@ void main() {
   AppBindings.init();
   Get.put(ApiServices(baseUrl: 'https://skinseekapi.dsrt321.online'));
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
@@ -24,6 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       navigatorKey: AppNavigation.navigatorKey,
 
+      // home: const PlanReadyScreen(),
       home: const OnboardingScreen(),
       // home: const BasePage(),
     );
