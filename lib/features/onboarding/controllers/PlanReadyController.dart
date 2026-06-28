@@ -24,6 +24,7 @@ class PlanReadyController extends GetxController {
   void onInit() {
     super.onInit();
     _startFlow();
+    print("ashgfgja:${StorageService.accessToken}");
   }
 
   Future<void> _startFlow() async {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
@@ -63,6 +64,8 @@ class OtpVerificationController extends GetxController {
           await StorageService.saveRefreshToken(data['refresh']);
           await Future.delayed(const Duration(milliseconds: 100));
           AppLog.info('Token saved: ${StorageService.accessToken}');
+
+          print('KDXFJhdgh: ${data['access']}');
           AppNavigation.push(AccountCreatedScreen());
         } else {
           AppNavigation.push(ResetPasswordScreen(email: email, otp: otp));

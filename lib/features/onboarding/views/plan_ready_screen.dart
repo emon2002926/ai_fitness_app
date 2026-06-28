@@ -1,4 +1,5 @@
 import 'package:ai_fitness_app/core/util/app_navigation.dart';
+import 'package:ai_fitness_app/core/util/storage_service.dart';
 import 'package:ai_fitness_app/features/base_screen/views/base_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,7 +18,7 @@ class PlanReadyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(PlanReadyController());
-
+    print("sdfkgjfhdgkh: ${StorageService.accessToken}");
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(

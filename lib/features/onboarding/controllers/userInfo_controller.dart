@@ -17,6 +17,7 @@ class UserInfoController extends GetxController {
 
   static const int totalSteps = 9;
 
+
   // Step 0 - Age
   final selectedAge = 19.obs;
 
