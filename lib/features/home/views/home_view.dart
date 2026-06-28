@@ -15,43 +15,50 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: context.h(100)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _HomeHeader(controller: controller),
-              SizedBox(height: context.h(20)),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: context.w(20)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _LevelCard(controller: controller),
-                    SizedBox(height: context.h(16)),
-                    _StatsRow(controller: controller),
-                    SizedBox(height: context.h(24)),
-                    AppText(
-                      data: "Today's Plan",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white54,
-                    ),
-                    SizedBox(height: context.h(12)),
-                    _TodayPlanCard(controller: controller),
-                    SizedBox(height: context.h(16)),
-                    _CalorieCard(controller: controller),
-                  ],
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xFFF5A623)),
+            );
+          }
+
+          return SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: context.h(100)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _HomeHeader(controller: controller),
+                SizedBox(height: context.h(20)),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: context.w(20)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _LevelCard(controller: controller),
+                      SizedBox(height: context.h(16)),
+                      _StatsRow(controller: controller),
+                      SizedBox(height: context.h(24)),
+                      AppText(
+                        data: "Today's Plan",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white54,
+                      ),
+                      SizedBox(height: context.h(12)),
+                      _TodayPlanCard(controller: controller),
+                      SizedBox(height: context.h(16)),
+                      _CalorieCard(controller: controller),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
 }
-
 class _HomeHeader extends StatelessWidget {
   final HomeController controller;
   const _HomeHeader({required this.controller});

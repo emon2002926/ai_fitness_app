@@ -17,4 +17,7 @@ class AppConstant {
   static const String resendOtpEndpoint = '$baseUrl/api/v1/auth/resend-otp/';
   static const String onboardingEndpoint = '$baseUrl/api/v1/service/onboarding/create/';
 
+  static const String homeEndpoint = '$baseUrl/api/v1/service/home/onboarding/';
+
+
 }
