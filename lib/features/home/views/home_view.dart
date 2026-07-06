@@ -1,4 +1,5 @@
 import 'package:ai_fitness_app/core/constants/app_assert_image.dart';
+import 'package:ai_fitness_app/core/util/storage_service.dart';
 import 'package:flutter/material.dart';
 import '../../../core/util/screen_size.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(HomeController());
-
+    print("sdfkgjfhdgkh: ${StorageService.accessToken}");
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(

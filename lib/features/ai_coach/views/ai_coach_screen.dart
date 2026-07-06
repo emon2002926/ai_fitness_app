@@ -5,6 +5,10 @@ import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/text/app_text.dart';
 import '../controllers/ai_coach_controller.dart';
 import 'package:get/get.dart';
+
+import '../widgets/ai_coach_widgets.dart';
+
+
 class AiCoachScreen extends StatelessWidget {
   const AiCoachScreen({super.key});
 
@@ -22,7 +26,7 @@ class AiCoachScreen extends StatelessWidget {
               child: Obx(() {
                 final messages = controller.messages;
                 final isTyping = controller.isTyping.value;
-        
+
                 return ListView.builder(
                   controller: controller.scrollController,
                   padding: EdgeInsets.symmetric(
@@ -37,7 +41,7 @@ class AiCoachScreen extends StatelessWidget {
                     final message = messages[index];
                     return message.isUser
                         ? _UserBubble(message: message)
-                        : _AiBubble(message: message);
+                        : AiBubble(message: message);
                   },
                 );
               }),
@@ -142,61 +146,6 @@ class _AiCoachAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight + 8);
-}
-
-class _AiBubble extends StatelessWidget {
-  final ChatMessage message;
-  const _AiBubble({required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: context.h(20)),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Container(
-            width: context.w(38),
-            height: context.w(38),
-            margin: EdgeInsets.only(right: context.w(10)),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: AssetImage('assets/images/mascot_avatar.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Flexible(
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: context.w(16),
-                vertical: context.h(14),
-              ),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1A1A1A),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(18),
-                  topRight: Radius.circular(18),
-                  bottomRight: Radius.circular(18),
-                  bottomLeft: Radius.circular(4),
-                ),
-                border: Border.all(color: Colors.white12),
-              ),
-              child: AppText(
-                data: message.text,
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: Colors.white,
-                height: 1.5,
-              ),
-            ),
-          ),
-          SizedBox(width: context.w(40)),
-        ],
-      ),
-    );
-  }
 }
 
 class _UserBubble extends StatelessWidget {
