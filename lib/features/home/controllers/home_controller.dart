@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:ai_fitness_app/core/util/app_navigation.dart';
+import 'package:ai_fitness_app/features/auth/views/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../../core/constants/app_constant.dart';
 import '../../../core/util/app_log.dart';
 import '../../../core/util/storage_service.dart';
+import '../../auth/views/sign_up_screen.dart';
 import '../../base_screen/controllers/base_controller.dart';
 import '../../profile/views/profile_screen.dart';
 import '../widgets/workout_preview_dialog.dart';
@@ -83,6 +85,10 @@ class HomeController extends GetxController {
         streakCount.value    = d['streak'] ?? 0;
         workoutCount.value   = d['count_of_workouts'] ?? 0;
         goalProgress.value   = d['goal_progress_percentage'] ?? 0;
+      } else if (response.statusCode == 401) {
+        AppLog.error(endpoint, data, statusCode: response.statusCode);
+        await StorageService.logout();
+        AppNavigation.pushAndClear(const SignInScreen());
       } else {
         AppLog.error(endpoint, data, statusCode: response.statusCode);
       }

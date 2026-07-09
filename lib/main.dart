@@ -1,3 +1,5 @@
+import 'package:ai_fitness_app/core/util/storage_service.dart';
+import 'package:ai_fitness_app/features/auth/views/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -28,7 +30,8 @@ class MyApp extends StatelessWidget {
       // home: const PlanReadyScreen(),
       // home: const OnboardingScreen(),
       // home: const UserInfoScreen(),
-      home: const BasePage(),
+      // home: StorageService.accessToken != null ? const BasePage() : const SignInScreen(),
+      home:  BasePage()
     );
   }
 }

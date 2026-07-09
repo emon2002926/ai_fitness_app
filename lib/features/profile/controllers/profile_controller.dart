@@ -1,4 +1,5 @@
 import 'package:ai_fitness_app/core/util/app_navigation.dart';
+import 'package:ai_fitness_app/core/util/storage_service.dart';
 import 'package:ai_fitness_app/features/auth/views/sign_in_screen.dart';
 import 'package:ai_fitness_app/features/profile/views/terms_conditions_screen.dart';
 import 'package:ai_fitness_app/features/profile/widgets/edit_age_screen.dart';
@@ -61,7 +62,9 @@ class ProfileController extends GetxController {
     );
   }
 
-  void onLogOut(BuildContext context ) {
+  void onLogOut(BuildContext context ) async{
+    StorageService.logout();
+    await Future.delayed(const Duration(milliseconds: 100));
     AppNavigation.pushAndClear(
        SignInScreen(),
     );

@@ -1,3 +1,4 @@
+import 'package:ai_fitness_app/core/util/storage_service.dart';
 import 'package:flutter/material.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/text/app_text.dart';
@@ -236,6 +237,7 @@ class AiBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMealPlan = message.mealPlan != null && message.mealPlan!.isNotEmpty;
+    print('kjchgfuyahafg: ${StorageService.accessToken}');
 
     return Padding(
       padding: EdgeInsets.only(bottom: context.h(20)),

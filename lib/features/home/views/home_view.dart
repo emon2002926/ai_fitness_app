@@ -12,7 +12,6 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(HomeController());
-    print("sdfkgjfhdgkh: ${StorageService.accessToken}");
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
