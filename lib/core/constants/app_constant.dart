@@ -18,6 +18,7 @@ class AppConstant {
   static const String onboardingEndpoint = '$baseUrl/api/v1/service/onboarding/create/';
 
   static const String homeEndpoint = '$baseUrl/api/v1/service/home/onboarding/';
+  static const String workoutPlanEndpoint = '$baseUrl/api/v1/service/onboarding/workout-plan/list/';
 
 
 }

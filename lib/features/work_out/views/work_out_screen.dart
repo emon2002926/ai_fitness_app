@@ -51,7 +51,7 @@ class _StatsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Row(
+    return Obx(() => Row(
       children: [
         Expanded(
           child: _WorkoutStatCard(
@@ -77,10 +77,9 @@ class _StatsRow extends StatelessWidget {
           ),
         ),
       ],
-    );
+    ));
   }
 }
-
 class _WorkoutStatCard extends StatelessWidget {
   final String emoji;
   final String value;
@@ -133,14 +132,14 @@ class _WeekDayPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Obx(() => SizedBox(
       height: context.h(72),
-      child:  ListView.separated(
+      child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: controller.days.length,
-        separatorBuilder: (_, _) => SizedBox(width: context.w(10)),
+        separatorBuilder: (_, __) => SizedBox(width: context.w(10)),
         itemBuilder: (context, index) {
-          final day = controller.days[index];
+          final day        = controller.days[index];
           final isSelected = controller.selectedDayIndex.value == index;
 
           return GestureDetector(
@@ -154,21 +153,21 @@ class _WeekDayPicker extends StatelessWidget {
                     : const Color(0xFF1A1A1A),
                 borderRadius: BorderRadius.circular(context.w(14)),
                 border: Border.all(
-                  color: isSelected ? Colors.transparent : Colors.white70 ,
+                  color: isSelected ? Colors.transparent : Colors.white70,
                 ),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AppText(
-                    data: day['day']!,
+                    data: day['date']!,        // ← real calendar date
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
                   ),
                   SizedBox(height: context.h(2)),
                   AppText(
-                    data: day['label']!,
+                    data: day['label']!,       // ← "MON", "TUE", etc.
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: isSelected ? Colors.white70 : Colors.white38,
@@ -179,10 +178,9 @@ class _WeekDayPicker extends StatelessWidget {
           );
         },
       ),
-    );
+    ));
   }
 }
-
 class _WorkoutCard extends StatelessWidget {
   final WorkoutController controller;
   const _WorkoutCard({required this.controller});

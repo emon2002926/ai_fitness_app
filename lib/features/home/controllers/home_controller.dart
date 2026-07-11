@@ -29,10 +29,10 @@ class HomeController extends GetxController {
       ? 0.0
       : (currentXp.value / maxXp.value).clamp(0.0, 1.0);
 
-  // Static/local data (not from this API)
-  final todayWorkoutName = 'Upper Body Strength'.obs;
-  final workoutDuration = 45.obs;
-  final exerciseCount = 6.obs;
+  final todayWorkoutName = ''.obs;
+  final todayFocus = ''.obs;
+  final workoutDuration = 0.obs;
+  final exerciseCount = 0.obs;
   final workoutXp = 50.obs;
 
   final kcalLeft = 1522.obs;
@@ -43,20 +43,21 @@ class HomeController extends GetxController {
   final fatLeft = 11.obs;
   final fatGLeft = 114.obs;
 
-  final todayExercises = <WorkoutExercise>[
-    const WorkoutExercise('Jumping Jacks', done: true),
-    const WorkoutExercise('Arm Circles'),
-    const WorkoutExercise('Leg Swings'),
-    const WorkoutExercise('Bodyweight Squats'),
-    const WorkoutExercise('Hip Circles'),
-    const WorkoutExercise('Torso Twists'),
-  ].obs;
+  final todayExercises = <WorkoutExercise>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchHomeData();
+    _loadAll();
   }
+
+  Future<void> _loadAll() async {
+    await Future.wait([
+      fetchHomeData(),
+      fetchTodayWorkoutPlan(),
+    ]);
+  }
+
 
   Future<void> fetchHomeData() async {
     isLoading.value = true;
@@ -69,6 +70,7 @@ class HomeController extends GetxController {
         Uri.parse(endpoint),
         headers: {
           'Authorization': 'Bearer ${StorageService.accessToken}',
+          'accept': 'application/json',
         },
       );
 
@@ -78,13 +80,13 @@ class HomeController extends GetxController {
         AppLog.response(endpoint, data);
 
         final d = data['data'];
-        userName.value       = d['full_name'] ?? '';
-        currentXp.value      = d['total_xp'] ?? 0;
-        maxXp.value          = d['target_xp'] ?? 0;
-        level.value          = d['current_level'] ?? 0;
-        streakCount.value    = d['streak'] ?? 0;
-        workoutCount.value   = d['count_of_workouts'] ?? 0;
-        goalProgress.value   = d['goal_progress_percentage'] ?? 0;
+        userName.value     = d['full_name'] ?? '';
+        currentXp.value    = d['total_xp'] ?? 0;
+        maxXp.value        = d['target_xp'] ?? 0;
+        level.value        = d['current_level'] ?? 0;
+        streakCount.value  = d['streak'] ?? 0;
+        workoutCount.value = d['count_of_workouts'] ?? 0;
+        goalProgress.value = d['goal_progress_percentage'] ?? 0;
       } else if (response.statusCode == 401) {
         AppLog.error(endpoint, data, statusCode: response.statusCode);
         await StorageService.logout();
@@ -99,6 +101,87 @@ class HomeController extends GetxController {
     }
   }
 
+
+  Future<void> fetchTodayWorkoutPlan() async {
+    const endpoint =
+        'https://lexiapi.dsrt321.online/api/v1/service/onboarding/workout-plan/list/';
+
+    try {
+      AppLog.request(endpoint, method: 'GET');
+
+      final response = await http.get(
+        Uri.parse(endpoint),
+        headers: {
+          'Authorization': 'Bearer ${StorageService.accessToken}',
+          'accept': 'application/json',
+        },
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        AppLog.response(endpoint, data);
+
+        final plans = data['data'] as List;
+        if (plans.isEmpty) return;
+
+        final weeklyPlan = plans[0]['weekly_plan'] as List;
+        final todayName  = _todayDayName();
+
+        final todayPlan = weeklyPlan.firstWhereOrNull(
+              (day) => (day['day'] as String).toLowerCase() == todayName,
+        );
+
+        if (todayPlan == null) return;
+
+        final exercises = todayPlan['exercises'] as List;
+
+        todayWorkoutName.value = todayPlan['focus'] ?? '';
+        todayFocus.value       = todayPlan['focus'] ?? '';
+        exerciseCount.value    = exercises.length;
+        workoutDuration.value  = _sumDurations(exercises);
+
+        todayExercises.value = exercises.map((e) {
+          return WorkoutExercise(
+            e['name'] ?? '',
+            sets:     e['sets'] ?? 'N/A',
+            reps:     e['reps'] ?? 'N/A',
+            duration: e['duration'] ?? 'N/A',
+            imageUrl: e['image'] ?? '',
+          );
+        }).toList();
+      } else if (response.statusCode == 401) {
+        AppLog.error(endpoint, data, statusCode: response.statusCode);
+        await StorageService.logout();
+        AppNavigation.pushAndClear(const SignInScreen());
+      } else {
+        AppLog.error(endpoint, data, statusCode: response.statusCode);
+      }
+    } catch (e) {
+      AppLog.error(endpoint, e.toString());
+    }
+  }
+
+
+  String _todayDayName() {
+    const days = [
+      'monday', 'tuesday', 'wednesday',
+      'thursday', 'friday', 'saturday', 'sunday',
+    ];
+    return days[DateTime.now().weekday - 1];
+  }
+
+  int _sumDurations(List exercises) {
+    int total = 0;
+    for (final e in exercises) {
+      final dur   = e['duration'] as String? ?? '';
+      final match = RegExp(r'\d+').firstMatch(dur);
+      if (match != null) total += int.parse(match.group(0)!);
+    }
+    return total > 0 ? total : 30;
+  }
+
+
   void onNotificationTap() {}
 
   void onAvatarTap(BuildContext context) {
@@ -109,11 +192,11 @@ class HomeController extends GetxController {
     showDialog(
       context: context,
       builder: (dialogContext) => WorkoutPreviewDialog(
-        workoutName: todayWorkoutName.value,
-        duration: workoutDuration.value,
+        workoutName:   todayWorkoutName.value,
+        duration:      workoutDuration.value,
         exerciseCount: exerciseCount.value,
-        xp: workoutXp.value,
-        exercises: todayExercises,
+        xp:            workoutXp.value,
+        exercises:     todayExercises,
         onStart: () {
           Navigator.of(dialogContext).pop();
           Get.find<BaseController>().onTabSelected(1);

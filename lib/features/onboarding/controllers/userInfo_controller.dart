@@ -76,6 +76,7 @@ class UserInfoController extends GetxController {
 
   // Step 8 - Mascot
   final selectedMascot = ''.obs;
+  final selectedMascotIndex = 0.obs;
   final mascots = [
     {'image': 'assets/images/mascot_lion.png',     'label': 'Leo the Lion'},
     {'image': 'assets/images/mascot_tiger.png',    'label': 'Tory the Tiger'},
@@ -167,6 +168,7 @@ class UserInfoController extends GetxController {
       'diet': selectedDiet.value,
       'primary_goal': selectedGoal.value,
       'workout_time': selectedWorkoutTime.value,
+      'workout_buddy': selectedMascotIndex.value,
     };
 
     try {

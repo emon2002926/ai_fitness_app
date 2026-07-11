@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
       // home: const PlanReadyScreen(),
       // home: const OnboardingScreen(),
       // home: const UserInfoScreen(),
-      // home: StorageService.accessToken != null ? const BasePage() : const SignInScreen(),
-      home:  BasePage()
+      home: StorageService.accessToken != null ? const BasePage() : const SignInScreen(),
+      // home:  BasePage()
     );
   }
 }

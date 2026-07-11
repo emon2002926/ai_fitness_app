@@ -137,5 +137,17 @@ class WorkoutPreviewDialog extends StatelessWidget {
 class WorkoutExercise {
   final String name;
   final bool done;
-  const WorkoutExercise(this.name, {this.done = false});
+  final String sets;
+  final String reps;
+  final String duration;
+  final String imageUrl;
+
+  const WorkoutExercise(
+      this.name, {
+        this.done = false,
+        this.sets = 'N/A',
+        this.reps = 'N/A',
+        this.duration = 'N/A',
+        this.imageUrl = '',
+      });
 }

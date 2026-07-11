@@ -320,7 +320,7 @@ class _EditableValueBox extends StatelessWidget {
   }
 }
 
-// ── Step 0: Age ─────────────────────────────────────────────────────────────
+
 
 class _AgeStep extends StatelessWidget {
   const _AgeStep();
@@ -384,7 +384,7 @@ class _AgeStep extends StatelessWidget {
   }
 }
 
-// ── Step 1: Weight ───────────────────────────────────────────────────────────
+
 
 class _WeightStep extends StatelessWidget {
   const _WeightStep();
@@ -420,7 +420,6 @@ class _WeightStep extends StatelessWidget {
   }
 }
 
-// ── Step 2: Gender ───────────────────────────────────────────────────────────
 
 class _GenderStep extends StatelessWidget {
   const _GenderStep();
@@ -453,7 +452,6 @@ class _GenderStep extends StatelessWidget {
   }
 }
 
-// ── Step 3: Height ───────────────────────────────────────────────────────────
 
 class _HeightStep extends StatelessWidget {
   const _HeightStep();
@@ -489,7 +487,6 @@ class _HeightStep extends StatelessWidget {
   }
 }
 
-// ── Step 4: Diet ─────────────────────────────────────────────────────────────
 
 class _DietStep extends StatelessWidget {
   const _DietStep();
@@ -522,7 +519,6 @@ class _DietStep extends StatelessWidget {
   }
 }
 
-// ── Step 5: Goal ─────────────────────────────────────────────────────────────
 
 class _GoalStep extends StatelessWidget {
   const _GoalStep();
@@ -555,7 +551,6 @@ class _GoalStep extends StatelessWidget {
   }
 }
 
-// ── Step 6: Activity Level ───────────────────────────────────────────────────
 
 class _ActivityStep extends StatelessWidget {
   const _ActivityStep();
@@ -588,7 +583,6 @@ class _ActivityStep extends StatelessWidget {
   }
 }
 
-// ── Step 7: Workout Time ─────────────────────────────────────────────────────
 
 class _WorkoutTimeStep extends StatelessWidget {
   const _WorkoutTimeStep();
@@ -621,9 +615,7 @@ class _WorkoutTimeStep extends StatelessWidget {
   }
 }
 
-// ── Step 8: Mascot ───────────────────────────────────────────────────────────
 
-// ── Step 8: Mascot ───────────────────────────────────────────────────────────
 
 class _MascotStep extends StatelessWidget {
   const _MascotStep();
@@ -659,7 +651,10 @@ class _MascotStep extends StatelessWidget {
                   image: m['image']!,
                   label: m['label']!,
                   isSelected: selected == m['label'],
-                  onTap: () => controller.selectedMascot.value = m['label']!,
+                  onTap: () {
+                    controller.selectedMascot.value = m['label']!;
+                    controller.selectedMascotIndex.value = index;
+                  },
                 );
               },
             );
