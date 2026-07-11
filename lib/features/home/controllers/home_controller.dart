@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import '../../../core/constants/app_constant.dart';
 import '../../../core/util/app_log.dart';
 import '../../../core/util/storage_service.dart';
-import '../../auth/views/sign_up_screen.dart';
 import '../../base_screen/controllers/base_controller.dart';
 import '../../profile/views/profile_screen.dart';
 import '../widgets/workout_preview_dialog.dart';
@@ -103,8 +102,8 @@ class HomeController extends GetxController {
 
 
   Future<void> fetchTodayWorkoutPlan() async {
-    const endpoint =
-        'https://lexiapi.dsrt321.online/api/v1/service/onboarding/workout-plan/list/';
+    const endpoint = AppConstant.workoutPlanEndpoint;
+
 
     try {
       AppLog.request(endpoint, method: 'GET');
