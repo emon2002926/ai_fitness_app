@@ -55,19 +55,14 @@ class ExerciseTimerScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: context.h(16)),
-
-              // Exercise counter
               AppText(
-                data:
-                'Exercise ${controller.currentIndex.value + 1} of ${controller.allExercises.length}',
+                data: 'Exercise ${controller.currentIndex.value + 1} of ${controller.allExercises.length}',
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
                 color: Colors.white38,
                 textAlign: TextAlign.center,
               ),
-
               SizedBox(height: context.h(8)),
-
               AppText(
                 data: controller.currentName.value,
                 fontSize: 26,
@@ -75,9 +70,7 @@ class ExerciseTimerScreen extends StatelessWidget {
                 color: Colors.white,
                 textAlign: TextAlign.center,
               ),
-
               SizedBox(height: context.h(12)),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -86,7 +79,8 @@ class ExerciseTimerScreen extends StatelessWidget {
                     label: '${controller.currentSets.value} Sets',
                     isGold: false,
                   ),
-                  if (controller.currentReps.value.isNotEmpty) ...[
+                  if (controller.currentReps.value.isNotEmpty &&
+                      controller.currentReps.value != 'N/A') ...[
                     SizedBox(width: context.w(10)),
                     _PillBadge(
                       icon: Icons.play_arrow_rounded,
@@ -96,10 +90,7 @@ class ExerciseTimerScreen extends StatelessWidget {
                   ],
                 ],
               ),
-
-              SizedBox(height: context.h(24)),
-
-              // Exercise image
+              SizedBox(height: context.h(16)),
               Container(
                 width: context.w(240),
                 height: context.w(240),
@@ -125,31 +116,36 @@ class ExerciseTimerScreen extends StatelessWidget {
                   fit: BoxFit.contain,
                 ),
               ),
-
-              SizedBox(height: context.h(24)),
-
-              // Timer
+              SizedBox(height: context.h(16)),
               AppText(
                 data: controller.formattedTime,
                 fontSize: 56,
                 fontWeight: FontWeight.w800,
                 color: Colors.white,
               ),
-
-              SizedBox(height: context.h(8)),
-
-              // Set progress
+              SizedBox(height: context.h(4)),
               _SetProgressRow(controller: controller),
-
               const Spacer(),
-
-              // Restart / Pause / Complete set
+              if (controller.isSavingAchievement.value)
+                Padding(
+                  padding: EdgeInsets.only(bottom: context.h(12)),
+                  child: const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Color(0xFFF5A623),
+                    ),
+                  ),
+                ),
               Row(
                 children: [
                   Expanded(
                     child: AppButton(
                       buttonText: 'Restart',
-                      onPressed: controller.restart,
+                      onPressed: controller.isSavingAchievement.value
+                          ? () {}
+                          : controller.restart,
                       fillColor: Colors.transparent,
                       textColor: Colors.white,
                       fontSize: 16,
@@ -161,9 +157,10 @@ class ExerciseTimerScreen extends StatelessWidget {
                   SizedBox(width: context.w(12)),
                   Expanded(
                     child: AppButton(
-                      buttonText:
-                      controller.isRunning.value ? 'Pause' : 'Resume',
-                      onPressed: controller.togglePause,
+                      buttonText: controller.isRunning.value ? 'Pause' : 'Resume',
+                      onPressed: controller.isSavingAchievement.value
+                          ? () {}
+                          : controller.togglePause,
                       fillColor: const Color(0xFFF5A623),
                       textColor: Colors.white,
                       fontSize: 16,
@@ -172,17 +169,16 @@ class ExerciseTimerScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
               SizedBox(height: context.h(12)),
-
-              // Complete set / next exercise
               Row(
                 children: [
                   if (!controller.isFirstExercise)
                     Expanded(
                       child: AppButton(
                         buttonText: 'Previous',
-                        onPressed: controller.previousExercise,
+                        onPressed: controller.isSavingAchievement.value
+                            ? () {}
+                            : controller.previousExercise,
                         fillColor: Colors.transparent,
                         textColor: Colors.white38,
                         fontSize: 14,
@@ -195,15 +191,19 @@ class ExerciseTimerScreen extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: AppButton(
-                      buttonText: controller.completedSets.value >=
-                          controller.currentSets.value
+                      buttonText: controller.isSavingAchievement.value
+                          ? 'Saving...'
+                          : controller.completedSets.value >= controller.currentSets.value
                           ? controller.isLastExercise
                           ? 'Finish Workout'
                           : 'Next Exercise'
                           : 'Complete Set (${controller.completedSets.value}/${controller.currentSets.value})',
-                      onPressed: () {
+                      onPressed: controller.isSavingAchievement.value
+                          ? () {}
+                          : () async {
                         if (controller.completedSets.value >=
                             controller.currentSets.value) {
+                          await controller.submitAchievementForCurrent();
                           if (controller.isLastExercise) {
                             AppNavigation.pop(context);
                           } else {
@@ -213,8 +213,9 @@ class ExerciseTimerScreen extends StatelessWidget {
                           controller.completeSet();
                         }
                       },
-                      fillColor: controller.completedSets.value >=
-                          controller.currentSets.value
+                      fillColor: controller.isSavingAchievement.value
+                          ? Colors.white24
+                          : controller.completedSets.value >= controller.currentSets.value
                           ? const Color(0xFF4CAF50)
                           : const Color(0xFFF5A623),
                       textColor: Colors.white,
@@ -224,7 +225,6 @@ class ExerciseTimerScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
               SizedBox(height: context.h(32)),
             ],
           ),

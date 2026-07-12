@@ -1,6 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+
+import '../../../core/constants/app_constant.dart';
+import '../../../core/util/app_log.dart';
+import '../../../core/util/app_navigation.dart';
+import '../../../core/util/storage_service.dart';
+import '../../auth/views/sign_in_screen.dart';
 class ExerciseTimerController extends GetxController {
   final String exerciseName;
   final int sets;
@@ -21,16 +29,20 @@ class ExerciseTimerController extends GetxController {
   });
 
   late final RxInt _secondsLeft = durationSeconds.obs;
-  final isRunning = true.obs;
+  final isRunning       = true.obs;
+  final isSavingAchievement = false.obs;
   Timer? _timer;
 
-  final currentIndex = 0.obs;
-  final completedSets = 0.obs;
-  final currentSets = 0.obs;
-  final currentReps = ''.obs;
+  final currentIndex    = 0.obs;
+  final completedSets   = 0.obs;
+  final currentSets     = 0.obs;
+  final currentReps     = ''.obs;
   final currentDuration = 0.obs;
-  final currentImage = ''.obs;
-  final currentName = ''.obs;
+  final currentImage    = ''.obs;
+  final currentName     = ''.obs;
+
+  // Tracks which exercise IDs have already been submitted this session
+  final _submittedExerciseIds = <int>{};
 
   String get formattedTime {
     final m = (_secondsLeft.value ~/ 60).toString().padLeft(2, '0');
@@ -38,7 +50,7 @@ class ExerciseTimerController extends GetxController {
     return '$m:$s';
   }
 
-  bool get isLastExercise => currentIndex.value == allExercises.length - 1;
+  bool get isLastExercise  => currentIndex.value == allExercises.length - 1;
   bool get isFirstExercise => currentIndex.value == 0;
 
   @override
@@ -51,14 +63,13 @@ class ExerciseTimerController extends GetxController {
   void _loadExercise(int index) {
     if (index < 0 || index >= allExercises.length) return;
     final e = allExercises[index];
-    currentIndex.value   = index;
-    currentName.value    = e['name'] as String? ?? '';
-    currentSets.value    = int.tryParse(e['sets'].toString()) ?? sets;
-    currentReps.value    = e['reps'] as String? ?? '';
+    currentIndex.value    = index;
+    currentName.value     = e['name']  as String? ?? '';
+    currentSets.value     = int.tryParse(e['sets'].toString()) ?? sets;
+    currentReps.value     = e['reps']  as String? ?? '';
     currentDuration.value = _parseDurationSeconds(e['duration'].toString());
-    currentImage.value   = e['image'] as String? ?? '';
-    completedSets.value  = 0;
-
+    currentImage.value    = e['image'] as String? ?? '';
+    completedSets.value   = 0;
     _timer?.cancel();
     _secondsLeft.value = currentDuration.value;
     _startTimer();
@@ -81,6 +92,84 @@ class ExerciseTimerController extends GetxController {
     }
   }
 
+  // ── Called when user taps "Finish Workout" or "Next Exercise" ─────────────
+  Future<void> submitAchievementForCurrent() async {
+    final e          = allExercises[currentIndex.value];
+    final exerciseId = e['id'] as int?;
+
+    // Guard: skip if no ID or already submitted
+    if (exerciseId == null || _submittedExerciseIds.contains(exerciseId)) return;
+
+    final completedRepsRaw = currentReps.value;
+    final completedRepsInt = int.tryParse(
+      completedRepsRaw.replaceAll(RegExp(r'[^0-9]'), ''),
+    ) ?? 0;
+
+    // Convert elapsed seconds to minutes (rounded up, minimum 1)
+    final elapsedSeconds  = currentDuration.value - _secondsLeft.value;
+    final durationMinutes = ((elapsedSeconds / 60).ceil()).clamp(1, 9999);
+
+    await _postAchievement(
+      exerciseId:      exerciseId,
+      completedSets:   completedSets.value,
+      completedReps:   completedRepsInt,
+      durationMinutes: durationMinutes,
+    );
+
+    _submittedExerciseIds.add(exerciseId);
+  }
+
+  Future<void> _postAchievement({
+    required int exerciseId,
+    required int completedSets,
+    required int completedReps,
+    required int durationMinutes,
+  }) async {
+    isSavingAchievement.value = true;
+    String endpoint = AppConstant.achievementsEndpoint;
+
+    try {
+      final body = jsonEncode({
+        'exercise':         exerciseId,
+        'notes':            '',
+        'completed_sets':   completedSets,
+        'completed_reps':   completedReps,
+        'duration_minutes': durationMinutes,
+      });
+
+      AppLog.request(endpoint, method: 'POST');
+
+      final response = await http.post(
+        Uri.parse(endpoint),
+        headers: {
+          'Authorization': 'Bearer ${StorageService.accessToken}',
+          'accept':        'application/json',
+          'Content-Type':  'application/json',
+        },
+        body: body,
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        AppLog.response(endpoint, data);
+        // Optionally: show XP earned toast
+        // final xpEarned = data['xp_earned'] ?? 0;
+        // Get.snackbar('🏆 XP Earned', '+$xpEarned XP', ...);
+      } else if (response.statusCode == 401) {
+        AppLog.error(endpoint, data, statusCode: response.statusCode);
+        await StorageService.logout();
+        AppNavigation.pushAndClear(const SignInScreen());
+      } else {
+        AppLog.error(endpoint, data, statusCode: response.statusCode);
+      }
+    } catch (e) {
+      AppLog.error(endpoint, e.toString());
+    } finally {
+      isSavingAchievement.value = false;
+    }
+  }
+
   void _startTimer() {
     isRunning.value = true;
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -93,18 +182,13 @@ class ExerciseTimerController extends GetxController {
     });
   }
 
-  void pause() {
-    _timer?.cancel();
-    isRunning.value = false;
-  }
-
-  void resume() => _startTimer();
-
-  void togglePause() => isRunning.value ? pause() : resume();
+  void pause()        { _timer?.cancel(); isRunning.value = false; }
+  void resume()       => _startTimer();
+  void togglePause()  => isRunning.value ? pause() : resume();
 
   void restart() {
     _timer?.cancel();
-    _secondsLeft.value = currentDuration.value;
+    _secondsLeft.value  = currentDuration.value;
     completedSets.value = 0;
     _startTimer();
   }
