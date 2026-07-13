@@ -26,7 +26,7 @@ class WorkoutController extends GetxController {
   final workoutXp        = 50.obs;
   final workoutImage     = 'assets/images/workout_thumb.png'.obs;
 
-  final exercises  = <Map<String, dynamic>>[].obs;
+  final exercises   = <Map<String, dynamic>>[].obs;
   final _weeklyPlan = <Map<String, dynamic>>[].obs;
 
   @override
@@ -110,11 +110,12 @@ class WorkoutController extends GetxController {
     workoutDuration.value  = _sumDurations(rawExs);
 
     exercises.value = rawExs.map((e) => <String, dynamic>{
-      'name':     e['name'] as String? ?? '',
-      'sets':     e['sets'] as String? ?? 'N/A',
-      'reps':     e['reps'] as String? ?? 'N/A',
+      'id':       e['id'],
+      'name':     e['name']     as String? ?? '',
+      'sets':     e['sets']     as String? ?? 'N/A',
+      'reps':     e['reps']     as String? ?? 'N/A',
       'duration': e['duration'] as String? ?? 'N/A',
-      'image':    e['image'] as String? ?? '',
+      'image':    e['image']    as String? ?? '',
       'done':     false,
     }).toList();
   }
@@ -125,9 +126,9 @@ class WorkoutController extends GetxController {
 
     AppNavigation.push(
       ExerciseTimerScreen(
-        exerciseName:    exercise['name'] as String,
+        exerciseName:    exercise['name']  as String,
         sets:            int.tryParse(exercise['sets'].toString()) ?? 3,
-        reps:            exercise['reps'] as String? ?? '',
+        reps:            exercise['reps']  as String? ?? '',
         durationSeconds: _parseDurationSeconds(exercise['duration'].toString()),
         exerciseImage:   exercise['image'] as String? ?? '',
         allExercises:    exercises.toList(),

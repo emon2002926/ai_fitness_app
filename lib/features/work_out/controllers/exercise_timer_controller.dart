@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,7 +30,7 @@ class ExerciseTimerController extends GetxController {
   });
 
   late final RxInt _secondsLeft = durationSeconds.obs;
-  final isRunning       = true.obs;
+  final isRunning           = true.obs;
   final isSavingAchievement = false.obs;
   Timer? _timer;
 
@@ -40,9 +41,6 @@ class ExerciseTimerController extends GetxController {
   final currentDuration = 0.obs;
   final currentImage    = ''.obs;
   final currentName     = ''.obs;
-
-  // Tracks which exercise IDs have already been submitted this session
-  final _submittedExerciseIds = <int>{};
 
   String get formattedTime {
     final m = (_secondsLeft.value ~/ 60).toString().padLeft(2, '0');
@@ -57,7 +55,6 @@ class ExerciseTimerController extends GetxController {
   void onReady() {
     super.onReady();
     _loadExercise(startIndex);
-    _startTimer();
   }
 
   void _loadExercise(int index) {
@@ -92,31 +89,26 @@ class ExerciseTimerController extends GetxController {
     }
   }
 
-  // ── Called when user taps "Finish Workout" or "Next Exercise" ─────────────
-  Future<void> submitAchievementForCurrent() async {
+  Future<void> submitAchievementForCurrent({BuildContext? context}) async {
     final e          = allExercises[currentIndex.value];
-    final exerciseId = e['id'] as int?;
+    final exerciseId = e['id'];
 
-    // Guard: skip if no ID or already submitted
-    if (exerciseId == null || _submittedExerciseIds.contains(exerciseId)) return;
+    if (exerciseId == null) return;
 
-    final completedRepsRaw = currentReps.value;
     final completedRepsInt = int.tryParse(
-      completedRepsRaw.replaceAll(RegExp(r'[^0-9]'), ''),
+      currentReps.value.replaceAll(RegExp(r'[^0-9]'), ''),
     ) ?? 0;
 
-    // Convert elapsed seconds to minutes (rounded up, minimum 1)
     final elapsedSeconds  = currentDuration.value - _secondsLeft.value;
     final durationMinutes = ((elapsedSeconds / 60).ceil()).clamp(1, 9999);
 
     await _postAchievement(
-      exerciseId:      exerciseId,
+      exerciseId:      exerciseId as int,
       completedSets:   completedSets.value,
       completedReps:   completedRepsInt,
       durationMinutes: durationMinutes,
+      context:         context,
     );
-
-    _submittedExerciseIds.add(exerciseId);
   }
 
   Future<void> _postAchievement({
@@ -124,9 +116,10 @@ class ExerciseTimerController extends GetxController {
     required int completedSets,
     required int completedReps,
     required int durationMinutes,
+    BuildContext? context,
   }) async {
     isSavingAchievement.value = true;
-    String endpoint = AppConstant.achievementsEndpoint;
+    const endpoint = AppConstant.achievementsEndpoint;
 
     try {
       final body = jsonEncode({
@@ -153,9 +146,9 @@ class ExerciseTimerController extends GetxController {
 
       if (response.statusCode == 201) {
         AppLog.response(endpoint, data);
-        // Optionally: show XP earned toast
-        // final xpEarned = data['xp_earned'] ?? 0;
-        // Get.snackbar('🏆 XP Earned', '+$xpEarned XP', ...);
+        if (context != null && context.mounted) {
+          Navigator.of(context).pop();
+        }
       } else if (response.statusCode == 401) {
         AppLog.error(endpoint, data, statusCode: response.statusCode);
         await StorageService.logout();
@@ -182,9 +175,9 @@ class ExerciseTimerController extends GetxController {
     });
   }
 
-  void pause()        { _timer?.cancel(); isRunning.value = false; }
-  void resume()       => _startTimer();
-  void togglePause()  => isRunning.value ? pause() : resume();
+  void pause()       { _timer?.cancel(); isRunning.value = false; }
+  void resume()      => _startTimer();
+  void togglePause() => isRunning.value ? pause() : resume();
 
   void restart() {
     _timer?.cancel();

@@ -7,8 +7,7 @@ import '../../../core/widgets/app_bar/build_app_bar.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/text/app_text.dart';
 import '../controllers/exercise_timer_controller.dart';
-
-class ExerciseTimerScreen extends StatelessWidget {
+class ExerciseTimerScreen extends StatefulWidget {
   final String exerciseName;
   final int sets;
   final String reps;
@@ -29,17 +28,39 @@ class ExerciseTimerScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final controller = Get.put(ExerciseTimerController(
-      exerciseName:    exerciseName,
-      sets:            sets,
-      reps:            reps,
-      durationSeconds: durationSeconds,
-      exerciseImage:   exerciseImage,
-      allExercises:    allExercises,
-      startIndex:      startIndex,
-    ));
+  State<ExerciseTimerScreen> createState() => _ExerciseTimerScreenState();
+}
 
+class _ExerciseTimerScreenState extends State<ExerciseTimerScreen> {
+  late final ExerciseTimerController controller;
+  late final String _tag;
+
+  @override
+  void initState() {
+    super.initState();
+    _tag = DateTime.now().microsecondsSinceEpoch.toString();
+    controller = Get.put(
+      ExerciseTimerController(
+        exerciseName:    widget.exerciseName,
+        sets:            widget.sets,
+        reps:            widget.reps,
+        durationSeconds: widget.durationSeconds,
+        exerciseImage:   widget.exerciseImage,
+        allExercises:    widget.allExercises,
+        startIndex:      widget.startIndex,
+      ),
+      tag: _tag,
+    );
+  }
+
+  @override
+  void dispose() {
+    Get.delete<ExerciseTimerController>(tag: _tag, force: true);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: BuildAppBar(
@@ -203,10 +224,12 @@ class ExerciseTimerScreen extends StatelessWidget {
                           : () async {
                         if (controller.completedSets.value >=
                             controller.currentSets.value) {
-                          await controller.submitAchievementForCurrent();
                           if (controller.isLastExercise) {
-                            AppNavigation.pop(context);
+                            await controller.submitAchievementForCurrent(
+                              context: context,
+                            );
                           } else {
+                            await controller.submitAchievementForCurrent();
                             controller.nextExercise();
                           }
                         } else {

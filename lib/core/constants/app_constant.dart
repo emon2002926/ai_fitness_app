@@ -16,6 +16,7 @@ class AppConstant {
   static const String forgotPasswordVerifyEndpoint = '$baseUrl/api/v1/auth/forgot-password/verify/';
   static const String resendOtpEndpoint = '$baseUrl/api/v1/auth/resend-otp/';
   static const String onboardingEndpoint = '$baseUrl/api/v1/service/onboarding/create/';
+  static const String onboardingEndpointGet = '$baseUrl/api/v1/service/onboarding/';
 
   static const String homeEndpoint = '$baseUrl/api/v1/service/home/onboarding/';
   static const String workoutPlanEndpoint = '$baseUrl/api/v1/service/onboarding/workout-plan/list/';
