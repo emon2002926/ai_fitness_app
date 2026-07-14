@@ -7,10 +7,13 @@ import 'core/bindings/app_bindings.dart';
 import 'core/services/api/services/api_services.dart';
 import 'core/util/app_navigation.dart';
 import 'features/base_screen/views/base_page.dart';
+import 'features/onboarding/controllers/splash_controller.dart';
+import 'features/splash/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   AppBindings.init();
+  Get.put(SplashController());
   GetStorage();
   Get.put(ApiServices(baseUrl: 'https://skinseekapi.dsrt321.online'));
   runApp(const MyApp());
@@ -31,6 +34,7 @@ class MyApp extends StatelessWidget {
       // home: const OnboardingScreen(),
       // home: const UserInfoScreen(),
       home: StorageService.accessToken != null ? const BasePage() : const SignInScreen(),
+      // home: SplashScreen()
       // home:  BasePage()
     );
   }
