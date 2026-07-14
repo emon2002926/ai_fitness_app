@@ -23,30 +23,35 @@ class NutritionScreen extends StatelessWidget {
         avatarUrl: 'assets/images/avatar.png',
         onNotificationPressed: () {},
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(bottom: context.h(100)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: context.h(20)),
-            _WeekDayPicker(controller: controller),
-            SizedBox(height: context.h(24)),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.w(20)),
-              child: Column(
-                children: controller.meals
-                    .map((section) => _MealSection(section: section))
-                    .toList(),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(color: Color(0xFFF5A623)),
+          );
+        }
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: context.h(100)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: context.h(20)),
+              _WeekDayPicker(controller: controller),
+              SizedBox(height: context.h(24)),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: context.w(20)),
+                child: Obx(() => Column(
+                  children: controller.meals
+                      .map((section) => _MealSection(section: section))
+                      .toList(),
+                )),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }
-
-// ── Week Day Picker ───────────────────────────────────────────────────────────
 
 class _WeekDayPicker extends StatelessWidget {
   final NutritionController controller;
@@ -105,7 +110,6 @@ class _WeekDayPicker extends StatelessWidget {
   }
 }
 
-// ── Meal Section ──────────────────────────────────────────────────────────────
 
 class _MealSection extends StatelessWidget {
   final MealSection section;
@@ -147,8 +151,6 @@ class _MealSection extends StatelessWidget {
     );
   }
 }
-
-// ── Meal Card ─────────────────────────────────────────────────────────────────
 
 class _MealCard extends StatelessWidget {
   final MealItem item;

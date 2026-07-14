@@ -1,16 +1,13 @@
 import 'dart:convert';
-
 import 'package:ai_fitness_app/features/profile/controllers/profile_controller.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:http/http.dart' as http;
-
 import '../../../core/constants/app_constant.dart';
 import '../../../core/util/app_log.dart';
 import '../../../core/util/app_navigation.dart';
 import '../../../core/util/storage_service.dart';
 import '../../auth/views/sign_in_screen.dart';
-import '../../onboarding/controllers/onboarding_controller.dart';
 
 class OnboardingService {
   static const _endpoint = AppConstant.onboardingEndpointGet;

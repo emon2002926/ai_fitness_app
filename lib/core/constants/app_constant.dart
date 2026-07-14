@@ -22,5 +22,8 @@ class AppConstant {
   static const String workoutPlanEndpoint = '$baseUrl/api/v1/service/onboarding/workout-plan/list/';
   static const String achievementsEndpoint = '$baseUrl/api/v1/service/workout/achievements/';
 
+  static const String mealPlannerEndpoint =
+      '$baseUrl/api/v1/service/chatbot/meal-planner/';
+
 
 }

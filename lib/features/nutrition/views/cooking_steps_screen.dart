@@ -156,14 +156,13 @@ class _MacroPills extends StatelessWidget {
       children: [
         Expanded(child: _MacroPill(emoji: '🍗', label: 'Protein', value: meal.protein)),
         SizedBox(width: context.w(10)),
-        Expanded(child: _MacroPill(emoji: '🌾', label: 'Carbs', value: 22)),
+        Expanded(child: _MacroPill(emoji: '🌾', label: 'Carbs',   value: meal.carbs)),
         SizedBox(width: context.w(10)),
-        Expanded(child: _MacroPill(emoji: '🥩', label: 'Fat', value: 11)),
+        Expanded(child: _MacroPill(emoji: '🥩', label: 'Fat',     value: meal.fat)),
       ],
     );
   }
 }
-
 class _MacroPill extends StatelessWidget {
   final String emoji;
   final String label;
