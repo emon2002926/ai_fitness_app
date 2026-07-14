@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/text/app_text.dart';
+import '../controllers/onboarding_service.dart';
 
 
 class DietOption {
@@ -15,7 +16,7 @@ class DietOption {
 
 class EditDietController extends GetxController {
   final selectedDiet = 'Vegan'.obs;
-  final isLoading = false.obs;
+  final isLoading    = false.obs;
 
   final List<DietOption> diets = const [
     DietOption(emoji: '🍽️', label: 'No Preference'),
@@ -24,18 +25,15 @@ class EditDietController extends GetxController {
     DietOption(emoji: '🌾', label: 'Gluten-Free'),
   ];
 
-  void selectDiet(String diet) {
-    selectedDiet.value = diet;
-  }
+  void selectDiet(String diet) => selectedDiet.value = diet;
 
   Future<void> save(BuildContext context) async {
     isLoading.value = true;
-    await Future.delayed(const Duration(milliseconds: 800));
+    final success = await OnboardingService.patch({'diet': selectedDiet.value});
     isLoading.value = false;
-    Navigator.pop(context);
+    if (success && context.mounted) Navigator.pop(context);
   }
 }
-
 class EditDietScreen extends StatelessWidget {
   const EditDietScreen({super.key});
 

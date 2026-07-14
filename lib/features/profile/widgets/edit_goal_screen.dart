@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/text/app_text.dart';
+import '../controllers/onboarding_service.dart';
 
 
 class GoalOption {
@@ -15,7 +16,7 @@ class GoalOption {
 
 class EditGoalController extends GetxController {
   final selectedGoal = 'Endurance'.obs;
-  final isLoading = false.obs;
+  final isLoading    = false.obs;
 
   final List<GoalOption> goals = const [
     GoalOption(emoji: '🔥', label: 'Fat Loss'),
@@ -24,18 +25,15 @@ class EditGoalController extends GetxController {
     GoalOption(emoji: '❤️', label: 'General Health'),
   ];
 
-  void selectGoal(String goal) {
-    selectedGoal.value = goal;
-  }
+  void selectGoal(String goal) => selectedGoal.value = goal;
 
   Future<void> save(BuildContext context) async {
     isLoading.value = true;
-    await Future.delayed(const Duration(milliseconds: 800));
+    final success = await OnboardingService.patch({'primary_goal': selectedGoal.value});
     isLoading.value = false;
-    Navigator.pop(context);
+    if (success && context.mounted) Navigator.pop(context);
   }
 }
-
 class EditGoalScreen extends StatelessWidget {
   const EditGoalScreen({super.key});
 

@@ -7,20 +7,30 @@ import '../../../core/widgets/text/app_text.dart';
 
 
 
+import '../controllers/onboarding_service.dart';
 import '../views/shared_widgets.dart';
 
 
 
 class EditHeightController extends GetxController {
-  final heightUnit = 'Cm'.obs;
+  final heightUnit       = 'Cm'.obs;
   final heightController = TextEditingController(text: '172');
-  final isLoading = false.obs;
+  final isLoading        = false.obs;
 
   Future<void> save(BuildContext context) async {
+    final raw = heightController.text.trim();
+    if (raw.isEmpty) return;
+
+    final heightInCm = heightUnit.value == 'Fit'
+        ? (double.tryParse(raw) ?? 0) * 30.48
+        : double.tryParse(raw) ?? 0;
+
     isLoading.value = true;
-    await Future.delayed(const Duration(milliseconds: 800));
+    final success = await OnboardingService.patch({
+      'height': heightInCm.toStringAsFixed(0),
+    });
     isLoading.value = false;
-    Navigator.pop(context);
+    if (success && context.mounted) Navigator.pop(context);
   }
 
   @override
@@ -29,7 +39,6 @@ class EditHeightController extends GetxController {
     super.onClose();
   }
 }
-
 class EditHeightScreen extends StatelessWidget {
   const EditHeightScreen({super.key});
 

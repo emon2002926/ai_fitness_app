@@ -12,7 +12,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProfileController());
+    final controller = Get.find<ProfileController>();
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -26,44 +26,39 @@ class ProfileScreen extends StatelessWidget {
             : controller.avatarUrl.value,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: context.w(20)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: context.h(24)),
-
-              _ProfileHeader(controller: controller),
-
-              SizedBox(height: context.h(24)),
-
-              _LevelCard(controller: controller),
-
-              SizedBox(height: context.h(16)),
-
-              _StatsRow(controller: controller),
-
-              SizedBox(height: context.h(28)),
-
-              _SectionLabel(label: 'Personal Details'),
-              SizedBox(height: context.h(12)),
-              _PersonalDetailsCard(controller: controller),
-
-              SizedBox(height: context.h(28)),
-
-              _SectionLabel(label: 'Support & Legal'),
-              SizedBox(height: context.h(12)),
-              _SupportCard(controller: controller),
-
-              SizedBox(height: context.h(40)),
-            ],
+        child: RefreshIndicator(
+          color: const Color(0xFFF5A623),
+          backgroundColor: const Color(0xFF1A1A1A),
+          onRefresh: controller.fetchAll,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: context.w(20)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: context.h(24)),
+                _ProfileHeader(controller: controller),
+                SizedBox(height: context.h(24)),
+                _LevelCard(controller: controller),
+                SizedBox(height: context.h(16)),
+                _StatsRow(controller: controller),
+                SizedBox(height: context.h(28)),
+                _SectionLabel(label: 'Personal Details'),
+                SizedBox(height: context.h(12)),
+                _PersonalDetailsCard(controller: controller),
+                SizedBox(height: context.h(28)),
+                _SectionLabel(label: 'Support & Legal'),
+                SizedBox(height: context.h(12)),
+                _SupportCard(controller: controller),
+                SizedBox(height: context.h(40)),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
 
 class _ProfileHeader extends StatelessWidget {
   final ProfileController controller;

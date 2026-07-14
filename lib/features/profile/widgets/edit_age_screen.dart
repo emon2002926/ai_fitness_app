@@ -4,11 +4,12 @@ import 'package:get/get.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/text/app_text.dart';
+import '../controllers/onboarding_service.dart';
 
 
 class EditAgeController extends GetxController {
   final selectedAge = 19.obs;
-  final isLoading = false.obs;
+  final isLoading   = false.obs;
 
   final int minAge = 10;
   final int maxAge = 100;
@@ -23,15 +24,13 @@ class EditAgeController extends GetxController {
     );
   }
 
-  void onAgeChanged(int index) {
-    selectedAge.value = minAge + index;
-  }
+  void onAgeChanged(int index) => selectedAge.value = minAge + index;
 
   Future<void> save(BuildContext context) async {
     isLoading.value = true;
-    await Future.delayed(const Duration(milliseconds: 800));
+    final success = await OnboardingService.patch({'age': selectedAge.value});
     isLoading.value = false;
-    Navigator.pop(context);
+    if (success && context.mounted) Navigator.pop(context);
   }
 
   @override
@@ -40,7 +39,6 @@ class EditAgeController extends GetxController {
     super.onClose();
   }
 }
-
 class EditAgeScreen extends StatelessWidget {
   const EditAgeScreen({super.key});
 

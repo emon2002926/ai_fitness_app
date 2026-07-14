@@ -45,15 +45,14 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _fetchAll();
+    fetchAll();
   }
 
-  Future<void> _fetchAll() async {
+  Future<void> fetchAll() async {
     isLoading.value = true;
     await Future.wait([_fetchOnboarding(), _fetchHome()]);
     isLoading.value = false;
   }
-
   Future<void> _fetchOnboarding() async {
     const endpoint = AppConstant.onboardingEndpointGet;
     try {

@@ -6,19 +6,29 @@ import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/text/app_text.dart';
 
 
+import '../controllers/onboarding_service.dart';
 import '../views/shared_widgets.dart';
 
 
 class EditWeightController extends GetxController {
-  final weightUnit = 'KG'.obs;
+  final weightUnit       = 'KG'.obs;
   final weightController = TextEditingController(text: '62');
-  final isLoading = false.obs;
+  final isLoading        = false.obs;
 
   Future<void> save(BuildContext context) async {
+    final raw = weightController.text.trim();
+    if (raw.isEmpty) return;
+
+    final weightInKg = weightUnit.value == 'Lbs'
+        ? (double.tryParse(raw) ?? 0) * 0.453592
+        : double.tryParse(raw) ?? 0;
+
     isLoading.value = true;
-    await Future.delayed(const Duration(milliseconds: 800));
+    final success = await OnboardingService.patch({
+      'weight': weightInKg.toStringAsFixed(1),
+    });
     isLoading.value = false;
-    Navigator.pop(context);
+    if (success && context.mounted) Navigator.pop(context);
   }
 
   @override
@@ -27,7 +37,6 @@ class EditWeightController extends GetxController {
     super.onClose();
   }
 }
-
 class EditWeightScreen extends StatelessWidget {
   const EditWeightScreen({super.key});
 
