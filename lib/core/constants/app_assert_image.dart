@@ -19,4 +19,17 @@
     final String flameIcon = "assets/images/flame_icon.png";
     final String muscleIcon = "assets/images/muscle_icon.png";
     final String workoutBanner = "assets/images/workout_banner.png";
+
+    // Mascots, ordered to match the backend `workout_buddy` index.
+    final List<String> mascots = const [
+      "assets/images/mascot_lion.png",
+      "assets/images/mascot_tiger.png",
+      "assets/images/mascot_dog.png",
+      "assets/images/mascot_elephant.png",
+    ];
+
+    String mascotByIndex(int index) {
+      if (index < 0 || index >= mascots.length) return mascots.first;
+      return mascots[index];
+    }
   }

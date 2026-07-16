@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/constants/app_assert_image.dart';
+import '../../../core/controllers/mascot_controller.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/app_bar/build_app_bar.dart';
 import '../../../core/widgets/text/app_text.dart';
@@ -205,7 +206,7 @@ class _LevelCard extends StatelessWidget {
           SizedBox(width: context.w(12)),
 
           // Trophy illustration
-          Image.asset(AppAssertImage.instance.lionLogo,width: context.w(60),height: context.w(60),)
+          Image.asset(MascotController.to.image,width: context.w(60),height: context.w(60),)
           // const Text('🏆', style: TextStyle(fontSize: 36)),
         ],
       )),

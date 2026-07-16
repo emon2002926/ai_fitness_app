@@ -1,4 +1,5 @@
 import 'package:ai_fitness_app/core/constants/app_assert_image.dart';
+import 'package:ai_fitness_app/core/controllers/mascot_controller.dart';
 import 'package:flutter/material.dart';
 import '../../../core/util/screen_size.dart';
 import 'package:get/get.dart';
@@ -268,12 +269,12 @@ class _LevelCard extends StatelessWidget {
             ),
           ),
           SizedBox(width: context.w(12)),
-          Image.asset(
-            AppAssertImage.instance.lionLogo,
+          Obx(() => Image.asset(
+            MascotController.to.image,
             width: context.w(60),
             height: context.h(70),
             fit: BoxFit.contain,
-          ),
+          )),
         ],
       ),
     );

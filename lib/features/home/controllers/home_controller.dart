@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../../core/constants/app_constant.dart';
+import '../../../core/controllers/mascot_controller.dart';
 import '../../../core/util/app_log.dart';
 import '../../../core/util/storage_service.dart';
 import '../../base_screen/controllers/base_controller.dart';
@@ -55,6 +56,7 @@ class HomeController extends GetxController {
     await Future.wait([
       fetchHomeData(),
       fetchTodayWorkoutPlan(),
+      MascotController.to.fetchMascot(),
     ]);
     hasLoadedOnce.value = true;
   }

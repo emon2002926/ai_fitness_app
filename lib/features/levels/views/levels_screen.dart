@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../core/constants/app_assert_image.dart';
+import '../../../core/controllers/mascot_controller.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/app_bar/build_app_bar.dart';
 import '../../../core/widgets/text/app_text.dart';
@@ -127,12 +127,12 @@ class _LevelProgressCard extends StatelessWidget {
             ),
           ),
           SizedBox(width: context.w(12)),
-          Image.asset(
-            AppAssertImage.instance.lionLogo,
+          Obx(() => Image.asset(
+            MascotController.to.image,
             width: context.w(56),
             height: context.w(56),
             fit: BoxFit.contain,
-          ),
+          )),
         ],
       ),
     ));
@@ -208,12 +208,12 @@ class _LevelPath extends StatelessWidget {
                       child: _levelLabel(item, context),
                     ),
                     SizedBox(width: context.w(16)),
-                    Image.asset(
-                      AppAssertImage.instance.lionLogo,
+                    Obx(() => Image.asset(
+                      MascotController.to.image,
                       width: context.w(100),
                       height: context.w(100),
                       fit: BoxFit.contain,
-                    ),
+                    )),
                   ],
                 );
               }

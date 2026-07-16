@@ -4,6 +4,7 @@ class StorageService {
   static final _box = GetStorage();
   static const _tokenKey = 'access_token';
   static const _refreshTokenKey = 'refresh_token';
+  static const _mascotIndexKey = 'workout_buddy';
 
   // Access Token
   static Future<void> saveToken(String accessToken) async {
@@ -20,7 +21,12 @@ class StorageService {
 
   static String? get refreshToken => _box.read(_refreshTokenKey);
 
+  // Mascot (workout_buddy) index
+  static Future<void> saveMascotIndex(int index) async {
+    await _box.write(_mascotIndexKey, index);
+  }
 
+  static int get mascotIndex => _box.read(_mascotIndexKey) ?? 0;
 
 
   // Clear methods

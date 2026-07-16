@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../core/constants/app_constant.dart';
+import '../../../core/controllers/mascot_controller.dart';
 import '../../../core/util/app_log.dart';
 import '../views/privacy_policy_screen.dart';
 import '../views/support_legal_screen.dart';
@@ -78,6 +79,12 @@ class ProfileController extends GetxController {
         age.value           = '${d['age'] ?? ''} Years';
         goal.value          = d['primary_goal'] as String? ?? '';
         diet.value          = d['diet']         as String? ?? '';
+
+        final buddy = d['workout_buddy'];
+        if (buddy is int) {
+          MascotController.to.index.value = buddy;
+          await StorageService.saveMascotIndex(buddy);
+        }
       } else if (response.statusCode == 401) {
         AppLog.error(endpoint, data, statusCode: response.statusCode);
         await StorageService.logout();
