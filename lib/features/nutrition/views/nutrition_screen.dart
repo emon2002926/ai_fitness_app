@@ -12,7 +12,9 @@ class NutritionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NutritionController());
+    final controller = Get.isRegistered<NutritionController>()
+        ? Get.find<NutritionController>()
+        : Get.put(NutritionController());
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -24,28 +26,34 @@ class NutritionScreen extends StatelessWidget {
         onNotificationPressed: () {},
       ),
       body: Obx(() {
-        if (controller.isLoading.value) {
+        if (controller.isLoading.value && !controller.hasLoadedOnce.value) {
           return const Center(
             child: CircularProgressIndicator(color: Color(0xFFF5A623)),
           );
         }
-        return SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: context.h(100)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: context.h(20)),
-              _WeekDayPicker(controller: controller),
-              SizedBox(height: context.h(24)),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: context.w(20)),
-                child: Obx(() => Column(
-                  children: controller.meals
-                      .map((section) => _MealSection(section: section))
-                      .toList(),
-                )),
-              ),
-            ],
+        return RefreshIndicator(
+          color: const Color(0xFFF5A623),
+          backgroundColor: const Color(0xFF1A1A1A),
+          onRefresh: controller.fetchMealPlan,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.only(bottom: context.h(100)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: context.h(20)),
+                _WeekDayPicker(controller: controller),
+                SizedBox(height: context.h(24)),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: context.w(20)),
+                  child: Obx(() => Column(
+                    children: controller.meals
+                        .map((section) => _MealSection(section: section))
+                        .toList(),
+                  )),
+                ),
+              ],
+            ),
           ),
         );
       }),

@@ -52,7 +52,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(OnboardingController());
+    if (!Get.isRegistered<OnboardingController>()) Get.put(OnboardingController());
 
     return Scaffold(
       backgroundColor: Colors.black,

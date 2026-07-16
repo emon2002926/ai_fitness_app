@@ -14,7 +14,9 @@ class LevelsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LevelsController());
+    final controller = Get.isRegistered<LevelsController>()
+        ? Get.find<LevelsController>()
+        : Get.put(LevelsController());
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -28,23 +30,29 @@ class LevelsScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: Obx(() {
-          if (controller.isLoading.value) {
+          if (controller.isLoading.value && !controller.hasLoadedOnce.value) {
             return const Center(
               child: CircularProgressIndicator(color: Color(0xFFF5A623)),
             );
           }
-          return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-              horizontal: context.w(20),
-              vertical: context.h(20),
-            ),
-            child: Column(
-              children: [
-                _LevelProgressCard(controller: controller),
-                SizedBox(height: context.h(32)),
-                _LevelPath(controller: controller),
-                SizedBox(height: context.h(40)),
-              ],
+          return RefreshIndicator(
+            color: const Color(0xFFF5A623),
+            backgroundColor: const Color(0xFF1A1A1A),
+            onRefresh: controller.fetchLevelData,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(
+                horizontal: context.w(20),
+                vertical: context.h(20),
+              ),
+              child: Column(
+                children: [
+                  _LevelProgressCard(controller: controller),
+                  SizedBox(height: context.h(32)),
+                  _LevelPath(controller: controller),
+                  SizedBox(height: context.h(40)),
+                ],
+              ),
             ),
           );
         }),

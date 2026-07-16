@@ -14,7 +14,9 @@ class ProgressScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProgressController());
+    final controller = Get.isRegistered<ProgressController>()
+        ? Get.find<ProgressController>()
+        : Get.put(ProgressController());
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -28,28 +30,34 @@ class ProgressScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: Obx(() {
-          if (controller.isLoading.value) {
+          if (controller.isLoading.value && !controller.hasLoadedOnce.value) {
             return const Center(
               child: CircularProgressIndicator(color: Color(0xFFF5A623)),
             );
           }
-          return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-              horizontal: context.w(20),
-              vertical: context.h(20),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _StatsRow(controller: controller),
-                SizedBox(height: context.h(28)),
-                _WeeklySection(controller: controller),
-                SizedBox(height: context.h(28)),
-                _WeightProgressSection(controller: controller),
-                SizedBox(height: context.h(28)),
-                _WeightSummaryCard(controller: controller),
-                SizedBox(height: context.h(40)),
-              ],
+          return RefreshIndicator(
+            color: const Color(0xFFF5A623),
+            backgroundColor: const Color(0xFF1A1A1A),
+            onRefresh: controller.fetchProgressData,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(
+                horizontal: context.w(20),
+                vertical: context.h(20),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _StatsRow(controller: controller),
+                  SizedBox(height: context.h(28)),
+                  _WeeklySection(controller: controller),
+                  SizedBox(height: context.h(28)),
+                  _WeightProgressSection(controller: controller),
+                  SizedBox(height: context.h(28)),
+                  _WeightSummaryCard(controller: controller),
+                  SizedBox(height: context.h(40)),
+                ],
+              ),
             ),
           );
         }),

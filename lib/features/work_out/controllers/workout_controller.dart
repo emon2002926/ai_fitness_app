@@ -12,6 +12,7 @@ import '../views/exercise_timer_screen.dart';
 
 class WorkoutController extends GetxController {
   final isLoading      = true.obs;
+  final hasLoadedOnce  = false.obs;
   final dayStreak      = 0.obs;
   final exercisesCount = 0.obs;
   final kcalGained     = 0.0.obs;
@@ -90,6 +91,7 @@ class WorkoutController extends GetxController {
       AppLog.error(endpoint, e.toString());
     } finally {
       isLoading.value = false;
+      hasLoadedOnce.value = true;
     }
   }
 

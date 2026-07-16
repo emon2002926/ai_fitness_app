@@ -16,7 +16,9 @@ class AiCoachScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AiCoachController());
+    final controller = Get.isRegistered<AiCoachController>()
+        ? Get.find<AiCoachController>()
+        : Get.put(AiCoachController());
 
     return Scaffold(
       backgroundColor: Colors.black,

@@ -44,7 +44,9 @@ class EditAgeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(EditAgeController());
+    final controller = Get.isRegistered<EditAgeController>()
+        ? Get.find<EditAgeController>()
+        : Get.put(EditAgeController());
 
     return Scaffold(
       backgroundColor: Colors.black,

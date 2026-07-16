@@ -39,7 +39,9 @@ class EditDietScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(EditDietController());
+    final controller = Get.isRegistered<EditDietController>()
+        ? Get.find<EditDietController>()
+        : Get.put(EditDietController());
 
     return Scaffold(
       backgroundColor: Colors.black,

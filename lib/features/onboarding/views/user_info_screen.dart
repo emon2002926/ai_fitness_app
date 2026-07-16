@@ -12,7 +12,7 @@ class UserInfoScreen extends GetView<UserInfoController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(UserInfoController());
+    if (!Get.isRegistered<UserInfoController>()) Get.put(UserInfoController());
 
     return Scaffold(
       backgroundColor: Colors.black,

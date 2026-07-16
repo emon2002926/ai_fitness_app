@@ -22,7 +22,9 @@ class ResetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ResetPasswordController());
+    final controller = Get.isRegistered<ResetPasswordController>()
+        ? Get.find<ResetPasswordController>()
+        : Get.put(ResetPasswordController());
 
     return Scaffold(
       backgroundColor: Colors.black,

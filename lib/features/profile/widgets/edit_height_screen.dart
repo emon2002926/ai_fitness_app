@@ -44,7 +44,9 @@ class EditHeightScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(EditHeightController());
+    final controller = Get.isRegistered<EditHeightController>()
+        ? Get.find<EditHeightController>()
+        : Get.put(EditHeightController());
 
     return Scaffold(
       backgroundColor: Colors.black,

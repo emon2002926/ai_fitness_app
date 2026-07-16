@@ -34,6 +34,7 @@ class WeightEntry {
 
 class ProgressController extends GetxController {
   final isLoading = true.obs;
+  final hasLoadedOnce = false.obs;
 
   // Stats (home/onboarding)
   final dayStreak = 0.obs;
@@ -75,6 +76,7 @@ class ProgressController extends GetxController {
       _computeWeightGainBadge();
     } finally {
       isLoading.value = false;
+      hasLoadedOnce.value = true;
     }
   }
 

@@ -13,7 +13,9 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SignUpController());
+    final controller = Get.isRegistered<SignUpController>()
+        ? Get.find<SignUpController>()
+        : Get.put(SignUpController());
 
     return Scaffold(
       backgroundColor: Colors.black,

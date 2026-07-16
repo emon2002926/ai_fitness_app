@@ -26,6 +26,7 @@ class LevelItem {
 
 class LevelsController extends GetxController {
   final isLoading    = true.obs;
+  final hasLoadedOnce = false.obs;
   final currentLevel = 0.obs;
   final currentXp    = 0.obs;
   final maxXp        = 0.obs;
@@ -77,6 +78,7 @@ class LevelsController extends GetxController {
       AppLog.error(endpoint, e.toString());
     } finally {
       isLoading.value = false;
+      hasLoadedOnce.value = true;
     }
   }
 

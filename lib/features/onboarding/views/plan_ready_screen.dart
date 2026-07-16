@@ -17,7 +17,9 @@ class PlanReadyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(PlanReadyController());
+    final controller = Get.isRegistered<PlanReadyController>()
+        ? Get.find<PlanReadyController>()
+        : Get.put(PlanReadyController());
     print("sdfkgjfhdgkh: ${StorageService.accessToken}");
     return Scaffold(
       backgroundColor: Colors.black,

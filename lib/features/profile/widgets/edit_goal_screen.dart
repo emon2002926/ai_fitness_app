@@ -39,7 +39,9 @@ class EditGoalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(EditGoalController());
+    final controller = Get.isRegistered<EditGoalController>()
+        ? Get.find<EditGoalController>()
+        : Get.put(EditGoalController());
 
     return Scaffold(
       backgroundColor: Colors.black,

@@ -17,7 +17,9 @@ class SupportLegalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SupportLegalController());
+    final controller = Get.isRegistered<SupportLegalController>()
+        ? Get.find<SupportLegalController>()
+        : Get.put(SupportLegalController());
 
     return Scaffold(
       backgroundColor: Colors.black,

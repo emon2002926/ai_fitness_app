@@ -14,7 +14,9 @@ class ForgetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ForgotPasswordController());
+    final controller = Get.isRegistered<ForgotPasswordController>()
+        ? Get.find<ForgotPasswordController>()
+        : Get.put(ForgotPasswordController());
 
     return Scaffold(
       backgroundColor: Colors.black,

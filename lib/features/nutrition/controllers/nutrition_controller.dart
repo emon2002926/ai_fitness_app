@@ -49,6 +49,7 @@ class MealSection {
 
 class NutritionController extends GetxController {
   final isLoading        = true.obs;
+  final hasLoadedOnce    = false.obs;
   final selectedDayIndex = 0.obs;
   final isUnlocked       = false.obs;
 
@@ -119,6 +120,7 @@ class NutritionController extends GetxController {
       AppLog.error(endpoint, e.toString());
     } finally {
       isLoading.value = false;
+      hasLoadedOnce.value = true;
     }
   }
 

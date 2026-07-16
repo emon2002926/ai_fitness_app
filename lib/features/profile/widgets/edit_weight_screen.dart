@@ -42,7 +42,9 @@ class EditWeightScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(EditWeightController());
+    final controller = Get.isRegistered<EditWeightController>()
+        ? Get.find<EditWeightController>()
+        : Get.put(EditWeightController());
 
     return Scaffold(
       backgroundColor: Colors.black,

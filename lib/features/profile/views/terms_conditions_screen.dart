@@ -17,7 +17,9 @@ class TermsConditionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(TermsConditionsController());
+    final controller = Get.isRegistered<TermsConditionsController>()
+        ? Get.find<TermsConditionsController>()
+        : Get.put(TermsConditionsController());
 
     return Scaffold(
       backgroundColor: Colors.black,

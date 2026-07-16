@@ -1,57 +1,64 @@
 import 'package:ai_fitness_app/core/constants/app_assert_image.dart';
-import 'package:ai_fitness_app/core/util/storage_service.dart';
 import 'package:flutter/material.dart';
 import '../../../core/util/screen_size.dart';
 import 'package:get/get.dart';
 import '../../../core/widgets/buttons/app_button.dart';
+import '../../../core/widgets/shimmer/app_shimmer.dart';
 import '../../../core/widgets/text/app_text.dart';
 import '../controllers/home_controller.dart';
+import 'home_shimmer.dart';
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HomeController());
+    final controller = Get.isRegistered<HomeController>()
+        ? Get.find<HomeController>()
+        : Get.put(HomeController());
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Obx(() {
-          if (controller.isLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFFF5A623)),
-            );
+          if (controller.isLoading.value && !controller.hasLoadedOnce.value) {
+            return const HomeShimmer();
           }
 
-          return SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: context.h(100)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _HomeHeader(controller: controller),
-                SizedBox(height: context.h(20)),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: context.w(20)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _LevelCard(controller: controller),
-                      SizedBox(height: context.h(16)),
-                      _StatsRow(controller: controller),
-                      SizedBox(height: context.h(24)),
-                      AppText(
-                        data: "Today's Plan",
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white54,
-                      ),
-                      SizedBox(height: context.h(12)),
-                      _TodayPlanCard(controller: controller),
-                      SizedBox(height: context.h(16)),
-                      _CalorieCard(controller: controller),
-                    ],
+          return RefreshIndicator(
+            color: const Color(0xFFF5A623),
+            backgroundColor: const Color(0xFF1A1A1A),
+            onRefresh: controller.loadAll,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.only(bottom: context.h(100)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _HomeHeader(controller: controller),
+                  SizedBox(height: context.h(20)),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: context.w(20)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _LevelCard(controller: controller),
+                        SizedBox(height: context.h(16)),
+                        _StatsRow(controller: controller),
+                        SizedBox(height: context.h(24)),
+                        AppText(
+                          data: "Today's Plan",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white54,
+                        ),
+                        SizedBox(height: context.h(12)),
+                        _TodayPlanCard(controller: controller),
+                        SizedBox(height: context.h(16)),
+                        _CalorieCard(controller: controller),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }),
@@ -59,6 +66,7 @@ class HomeView extends StatelessWidget {
     );
   }
 }
+
 class _HomeHeader extends StatelessWidget {
   final HomeController controller;
   const _HomeHeader({required this.controller});

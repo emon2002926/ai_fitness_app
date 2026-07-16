@@ -13,6 +13,7 @@ import '../widgets/workout_preview_dialog.dart';
 
 class HomeController extends GetxController {
   final isLoading = true.obs;
+  final hasLoadedOnce = false.obs;
 
   final userName = ''.obs;
   final avatarUrl = 'assets/images/avatar.png'.obs;
@@ -47,14 +48,15 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadAll();
+    loadAll();
   }
 
-  Future<void> _loadAll() async {
+  Future<void> loadAll() async {
     await Future.wait([
       fetchHomeData(),
       fetchTodayWorkoutPlan(),
     ]);
+    hasLoadedOnce.value = true;
   }
 
 

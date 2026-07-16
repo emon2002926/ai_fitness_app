@@ -17,7 +17,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(PrivacyPolicyController());
+    final controller = Get.isRegistered<PrivacyPolicyController>()
+        ? Get.find<PrivacyPolicyController>()
+        : Get.put(PrivacyPolicyController());
 
     return Scaffold(
       backgroundColor: Colors.black,

@@ -11,7 +11,9 @@ class WorkOutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(WorkoutController());
+    final controller = Get.isRegistered<WorkoutController>()
+        ? Get.find<WorkoutController>()
+        : Get.put(WorkoutController());
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -24,24 +26,30 @@ class WorkOutScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: Obx(() {
-          if (controller.isLoading.value) {
+          if (controller.isLoading.value && !controller.hasLoadedOnce.value) {
             return const Center(
               child: CircularProgressIndicator(color: Color(0xFFF5A623)),
             );
           }
-          return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: context.w(20)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: context.h(20)),
-                _StatsRow(controller: controller),
-                SizedBox(height: context.h(20)),
-                _WeekDayPicker(controller: controller),
-                SizedBox(height: context.h(20)),
-                _WorkoutCard(controller: controller),
-                SizedBox(height: context.h(40)),
-              ],
+          return RefreshIndicator(
+            color: const Color(0xFFF5A623),
+            backgroundColor: const Color(0xFF1A1A1A),
+            onRefresh: controller.fetchWorkoutPlan,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: context.w(20)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: context.h(20)),
+                  _StatsRow(controller: controller),
+                  SizedBox(height: context.h(20)),
+                  _WeekDayPicker(controller: controller),
+                  SizedBox(height: context.h(20)),
+                  _WorkoutCard(controller: controller),
+                  SizedBox(height: context.h(40)),
+                ],
+              ),
             ),
           );
         }),
