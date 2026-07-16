@@ -357,14 +357,15 @@ class _LogMealButton extends StatelessWidget {
         context.w(20),
         context.h(32),
       ),
-      child: AppButton(
+      child: Obx(() => AppButton(
         buttonText: 'LOG MEAL',
         onPressed: () => controller.logMeal(context),
+        isLoading: controller.isLogging.value,
         fillColor: const Color(0xFFF5A623),
         textColor: Colors.white,
         fontSize: 15,
         fontWeight: FontWeight.w700,
-      ),
+      )),
     );
   }
 }

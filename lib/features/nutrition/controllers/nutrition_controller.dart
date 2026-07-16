@@ -22,6 +22,8 @@ class MealItem {
   final String image;
   final List<String> ingredients;
   final List<String> cookingSteps;
+  final int? mealPlanId;
+  final String mealType;
 
   const MealItem({
     required this.name,
@@ -34,6 +36,8 @@ class MealItem {
     required this.image,
     required this.ingredients,
     required this.cookingSteps,
+    this.mealPlanId,
+    this.mealType = 'breakfast',
   });
 }
 
@@ -97,11 +101,12 @@ class NutritionController extends GetxController {
         final list = data as List;
         if (list.isEmpty) return;
 
-        final plan = list.first as Map<String, dynamic>;
+        final plan   = list.first as Map<String, dynamic>;
+        final planId = plan['id'] as int?;
         meals.value = [
-          _parseSection('Breakfast', plan['breakfast']),
-          _parseSection('Lunch',     plan['lunch']),
-          _parseSection('Dinner',    plan['dinner']),
+          _parseSection('Breakfast', plan['breakfast'], planId, 'breakfast'),
+          _parseSection('Lunch',     plan['lunch'],     planId, 'lunch'),
+          _parseSection('Dinner',    plan['dinner'],    planId, 'dinner'),
         ];
       } else if (response.statusCode == 401) {
         AppLog.error(endpoint, data, statusCode: response.statusCode);
@@ -117,7 +122,7 @@ class NutritionController extends GetxController {
     }
   }
 
-  MealSection _parseSection(String title, dynamic raw) {
+  MealSection _parseSection(String title, dynamic raw, int? planId, String mealType) {
     if (raw == null) return MealSection(title: title, items: []);
     final m = raw as Map<String, dynamic>;
 
@@ -154,6 +159,8 @@ class NutritionController extends GetxController {
           image:        'assets/images/dish.png',
           ingredients:  ingreds,
           cookingSteps: steps,
+          mealPlanId:   planId,
+          mealType:     mealType,
         ),
       ],
     );

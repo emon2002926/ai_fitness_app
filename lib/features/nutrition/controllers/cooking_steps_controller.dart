@@ -1,6 +1,14 @@
-import 'package:get/get.dart';
+import 'dart:convert';
 
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+
+import '../../../core/constants/app_constant.dart';
+import '../../../core/util/app_log.dart';
+import '../../../core/util/app_navigation.dart';
+import '../../../core/util/storage_service.dart';
 import '../../../core/widgets/snakbar/custom_snackbar.dart';
+import '../../auth/views/sign_in_screen.dart';
 import 'nutrition_controller.dart';
 import 'package:flutter/material.dart';
 class Ingredient {
@@ -22,6 +30,7 @@ class CookingStepsController extends GetxController {
   CookingStepsController({required this.meal});
 
   final isFavorite = false.obs;
+  final isLogging  = false.obs;
 
   late final List<Ingredient> ingredients;
   late final List<CookingStep> steps;
@@ -92,8 +101,51 @@ class CookingStepsController extends GetxController {
 
   void toggleFavorite() => isFavorite.value = !isFavorite.value;
 
-  void logMeal(BuildContext context) {
-    CustomSnackBar.success('Meal logged successfully!');
-    Navigator.of(context).pop();
+  Future<void> logMeal(BuildContext context) async {
+    if (isLogging.value) return;
+    isLogging.value = true;
+
+    const endpoint = AppConstant.logMealEndpoint;
+    final body = {
+      'meal_plan':  meal.mealPlanId,
+      'meal_type':  meal.mealType,
+      'fat':        meal.fat,
+      'carbs':      meal.carbs,
+      'protein':    meal.protein,
+    };
+
+    try {
+      AppLog.request(endpoint, method: 'POST', body: body);
+
+      final response = await http.post(
+        Uri.parse(endpoint),
+        headers: {
+          'Authorization': 'Bearer ${StorageService.accessToken}',
+          'accept':        'application/json',
+          'Content-Type':  'application/json',
+        },
+        body: jsonEncode(body),
+      );
+
+      final data = response.body.isNotEmpty ? jsonDecode(response.body) : null;
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        AppLog.response(endpoint, data);
+        CustomSnackBar.success('Meal logged successfully!');
+        if (context.mounted) Navigator.of(context).pop();
+      } else if (response.statusCode == 401) {
+        AppLog.error(endpoint, data, statusCode: response.statusCode);
+        await StorageService.logout();
+        AppNavigation.pushAndClear(const SignInScreen());
+      } else {
+        AppLog.error(endpoint, data, statusCode: response.statusCode);
+        CustomSnackBar.error('Failed to log meal. Please try again.');
+      }
+    } catch (e) {
+      AppLog.error(endpoint, e.toString());
+      CustomSnackBar.error('Failed to log meal. Please try again.');
+    } finally {
+      isLogging.value = false;
+    }
   }
 }

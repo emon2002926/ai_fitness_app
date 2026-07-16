@@ -25,5 +25,14 @@ class AppConstant {
   static const String mealPlannerEndpoint =
       '$baseUrl/api/v1/service/chatbot/meal-planner/';
 
+  static const String logMealEndpoint =
+      '$baseUrl/api/v1/service/meal-planner/achievements/';
+
+  static const String weeklyAchievementsReportEndpoint =
+      '$baseUrl/api/v1/service/meal-planner/achievements/report/';
+  static const String weightTrackingEndpoint =
+      '$baseUrl/api/v1/service/meal-planner/weight-tracking/';
+  static const String weightSummaryEndpoint =
+      '$baseUrl/api/v1/service/meal-planner/weight-summary/';
 
 }

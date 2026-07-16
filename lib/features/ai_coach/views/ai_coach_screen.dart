@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../core/util/app_navigation.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/text/app_text.dart';
+import '../../profile/views/profile_screen.dart';
 import '../controllers/ai_coach_controller.dart';
 import 'package:get/get.dart';
 
@@ -103,7 +105,9 @@ class _AiCoachAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+
+                  },
                   child: Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -124,15 +128,20 @@ class _AiCoachAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 SizedBox(width: context.w(12)),
-                Container(
-                  width: context.w(40),
-                  height: context.w(40),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xFFF5A623), width: 2),
-                    image: const DecorationImage(
-                      image: AssetImage('assets/images/avatar.png'),
-                      fit: BoxFit.cover,
+                GestureDetector(
+                  onTap: () {
+                    AppNavigation.push(const ProfileScreen(),context: context);
+                  },
+                  child: Container(
+                    width: context.w(40),
+                    height: context.w(40),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0xFFF5A623), width: 2),
+                      image: const DecorationImage(
+                        image: AssetImage('assets/images/avatar.png'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
