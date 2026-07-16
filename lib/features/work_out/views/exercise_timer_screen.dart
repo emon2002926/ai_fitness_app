@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../core/util/app_navigation.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/app_bar/build_app_bar.dart';
 import '../../../core/widgets/buttons/app_button.dart';
@@ -124,7 +123,7 @@ class _ExerciseTimerScreenState extends State<ExerciseTimerScreen> {
                     ? Image.network(
                   controller.currentImage.value,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const Icon(
+                  errorBuilder: (_, _, _) => const Icon(
                     Icons.fitness_center,
                     color: Colors.white38,
                     size: 60,

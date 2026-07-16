@@ -151,7 +151,7 @@ class _WeekDayPicker extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: controller.days.length,
-        separatorBuilder: (_, __) => SizedBox(width: context.w(10)),
+        separatorBuilder: (_, _) => SizedBox(width: context.w(10)),
         itemBuilder: (context, index) {
           final day = controller.days[index];
           final isSelected = controller.selectedDayIndex.value == index;
@@ -284,7 +284,7 @@ class _WorkoutCard extends StatelessWidget {
                               ? Image.network(
                             imageUrl,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => const Icon(
+                            errorBuilder: (_, _, _) => const Icon(
                               Icons.fitness_center,
                               color: Colors.white38,
                             ),

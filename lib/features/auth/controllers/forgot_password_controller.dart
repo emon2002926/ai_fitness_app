@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/util/app_log.dart';
 import '../../../core/util/app_navigation.dart';
-import '../../../core/util/storage_service.dart';
 import '../../../core/widgets/snakbar/custom_snackbar.dart';
 import '../views/otp_verification_screen.dart';
 

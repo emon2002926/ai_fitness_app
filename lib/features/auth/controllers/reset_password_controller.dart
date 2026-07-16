@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/constants/app_constant.dart';
 import '../../../core/util/app_log.dart';
-import '../../../core/util/app_navigation.dart';
 import '../../../core/widgets/snakbar/custom_snackbar.dart';
 import '../views/sign_in_screen.dart';
 import 'package:flutter/material.dart';

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../core/util/screen_size.dart';
 import 'package:get/get.dart';
 import '../../../core/widgets/buttons/app_button.dart';
-import '../../../core/widgets/shimmer/app_shimmer.dart';
 import '../../../core/widgets/text/app_text.dart';
 import '../controllers/home_controller.dart';
 import 'home_shimmer.dart';

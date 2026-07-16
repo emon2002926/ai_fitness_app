@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
@@ -114,8 +113,12 @@ class OtpVerificationController extends GetxController {
 
   @override
   void onClose() {
-    for (final c in otpControllers) c.dispose();
-    for (final f in focusNodes) f.dispose();
+    for (final c in otpControllers) {
+      c.dispose();
+    }
+    for (final f in focusNodes) {
+      f.dispose();
+    }
     super.onClose();
   }
 }

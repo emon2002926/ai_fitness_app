@@ -5,7 +5,7 @@ import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/shimmer/app_shimmer.dart';
 
 class HomeShimmer extends StatelessWidget {
-  const HomeShimmer();
+  const HomeShimmer({super.key});
 
   @override
   Widget build(BuildContext context) {
