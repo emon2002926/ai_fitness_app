@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../core/controllers/mascot_controller.dart';
 import '../../../core/util/screen_size.dart';
+import '../../../core/widgets/avatar/avatar_display_widget.dart';
 import '../../../core/widgets/app_bar/build_app_bar.dart';
 import '../../../core/widgets/text/app_text.dart';
 import '../controllers/levels_controller.dart';
@@ -35,25 +36,43 @@ class LevelsScreen extends StatelessWidget {
               child: CircularProgressIndicator(color: Color(0xFFF5A623)),
             );
           }
-          return RefreshIndicator(
-            color: const Color(0xFFF5A623),
-            backgroundColor: const Color(0xFF1A1A1A),
-            onRefresh: controller.fetchLevelData,
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(
-                horizontal: context.w(20),
-                vertical: context.h(20),
+          return Stack(
+            children: [
+              // Background mascot — fixed, behind everything
+              Positioned(
+                right: -context.w(10),
+                bottom: context.h(140),
+                child: Opacity(
+                  opacity: 0.8,
+                  child: AvatarDisplayWidget(
+                    width: context.w(220),
+                    height: context.w(220),
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
-              child: Column(
-                children: [
-                  _LevelProgressCard(controller: controller),
-                  SizedBox(height: context.h(32)),
-                  _LevelPath(controller: controller),
-                  SizedBox(height: context.h(40)),
-                ],
+              // Scrollable level content on top
+              RefreshIndicator(
+                color: const Color(0xFFF5A623),
+                backgroundColor: const Color(0xFF1A1A1A),
+                onRefresh: controller.fetchLevelData,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.w(20),
+                    vertical: context.h(20),
+                  ),
+                  child: Column(
+                    children: [
+                      _LevelProgressCard(controller: controller),
+                      SizedBox(height: context.h(32)),
+                      _LevelPath(controller: controller),
+                      SizedBox(height: context.h(40)),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           );
         }),
       ),
@@ -127,12 +146,11 @@ class _LevelProgressCard extends StatelessWidget {
             ),
           ),
           SizedBox(width: context.w(12)),
-          Obx(() => Image.asset(
-            MascotController.to.image,
+          AvatarDisplayWidget(
             width: context.w(56),
             height: context.w(56),
             fit: BoxFit.contain,
-          )),
+          ),
         ],
       ),
     ));
@@ -181,6 +199,7 @@ class _LevelPath extends StatelessWidget {
                 painter: _CurvedPathPainter(centers: centers),
               ),
             ),
+            // Draw Nodes
             ...List.generate(levels.length, (index) {
               final item    = levels[index];
               final center  = centers[index];
@@ -195,42 +214,19 @@ class _LevelPath extends StatelessWidget {
 
               Widget node = _LevelNode(item: item, size: nodeSize);
 
-              if (item.hasMascot) {
-                node = Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    node,
-                    SizedBox(width: context.w(12)),
-                    Padding(
-                      padding: EdgeInsets.only(right: context.w(10)),
-                      child: _levelLabel(item, context),
-                    ),
-                    SizedBox(width: context.w(16)),
-                    Obx(() => Image.asset(
-                      MascotController.to.image,
-                      width: context.w(100),
-                      height: context.w(100),
-                      fit: BoxFit.contain,
-                    )),
-                  ],
-                );
-              }
-
               Widget row = Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (!labelOnRight && !item.hasMascot)
+                  if (!labelOnRight)
                     Padding(
-                      padding: EdgeInsets.only(right: context.w(10)),
+                      padding: EdgeInsets.only(right: context.w(12)),
                       child: _levelLabel(item, context),
                     ),
                   node,
-                  if (labelOnRight && !item.hasMascot)
+                  if (labelOnRight)
                     Padding(
-                      padding: EdgeInsets.only(left: context.w(10)),
+                      padding: EdgeInsets.only(left: context.w(12)),
                       child: _levelLabel(item, context),
                     ),
                 ],
@@ -351,10 +347,13 @@ class _LevelNode extends StatelessWidget {
     return SizedBox(
       width: size,
       height: size,
-      child: Image.asset(
-        'assets/images/check_icon.png',
-        width: size * 0.45,
-        height: size * 0.45,
+      child: Opacity(
+        opacity: 0.35,
+        child: Image.asset(
+          'assets/images/check_icon.png',
+          width: size * 0.45,
+          height: size * 0.45,
+        ),
       ),
     );
   }

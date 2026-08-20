@@ -1,5 +1,6 @@
 import 'package:ai_fitness_app/core/util/storage_service.dart';
 import 'package:flutter/material.dart';
+import '../../../core/widgets/avatar/avatar_display_widget.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/text/app_text.dart';
 import '../controllers/ai_coach_controller.dart';
@@ -248,10 +249,9 @@ class AiBubble extends StatelessWidget {
             width: context.w(38),
             height: context.w(38),
             margin: EdgeInsets.only(right: context.w(10)),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: AssetImage('assets/images/mascot_avatar.png'),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(context.w(19)),
+              child: AvatarDisplayWidget(
                 fit: BoxFit.cover,
               ),
             ),

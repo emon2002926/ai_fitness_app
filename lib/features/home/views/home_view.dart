@@ -1,6 +1,7 @@
 import 'package:ai_fitness_app/core/constants/app_assert_image.dart';
 import 'package:ai_fitness_app/core/controllers/mascot_controller.dart';
 import 'package:flutter/material.dart';
+import '../../../core/widgets/avatar/avatar_display_widget.dart';
 import '../../../core/util/screen_size.dart';
 import 'package:get/get.dart';
 import '../../../core/widgets/buttons/app_button.dart';
@@ -269,12 +270,11 @@ class _LevelCard extends StatelessWidget {
             ),
           ),
           SizedBox(width: context.w(12)),
-          Obx(() => Image.asset(
-            MascotController.to.image,
+          AvatarDisplayWidget(
             width: context.w(60),
             height: context.h(70),
             fit: BoxFit.contain,
-          )),
+          ),
         ],
       ),
     );
@@ -414,38 +414,61 @@ class _TodayPlanCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.all(context.w(16)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Obx(() => AppText(
-                  data: controller.todayWorkoutName.value,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                )),
-                SizedBox(height: context.h(6)),
-                Obx(() => AppText(
-                  data:
-                  '${controller.workoutDuration.value} min • ${controller.exerciseCount.value} Exercises • ${controller.workoutXp.value} Xp',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xFFF5A623),
-                )),
-                SizedBox(height: context.h(16)),
-                AppButton(
-                  buttonText: 'Start Workout',
-                  onPressed: (){controller.onStartWorkout(context);},
-                  fillColor: const Color(0xFFF5A623),
-                  textColor: Colors.white,
-                  fontSize: 14,
-                  borderRadius: 10,
-                  fontWeight: FontWeight.w600,
-                  buttonWidth: context.w(150),
-                  buttonHeight: 44,
-                ),
-              ],
-            ),
+            child: Obx(() {
+              if (MascotController.to.isPlanGenerating.value) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppText(
+                      data: 'AI is generating your plan...',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                    SizedBox(height: context.h(16)),
+                    const CircularProgressIndicator(color: Color(0xFFF5A623)),
+                  ],
+                );
+              }
+              
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AppText(
+                    data: controller.todayWorkoutName.value.isEmpty 
+                        ? 'Rest Day / No Plan' 
+                        : controller.todayWorkoutName.value,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                  SizedBox(height: context.h(6)),
+                  if (controller.todayWorkoutName.value.isNotEmpty)
+                    AppText(
+                      data: '${controller.workoutDuration.value} min • ${controller.exerciseCount.value} Exercises • ${controller.workoutXp.value} Xp',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFFF5A623),
+                    ),
+                  SizedBox(height: context.h(16)),
+                  AppButton(
+                    buttonText: controller.todayWorkoutName.value.isEmpty ? 'Waiting for plan' : 'Start Workout',
+                    onPressed: controller.todayWorkoutName.value.isEmpty 
+                        ? () {} 
+                        : () { controller.onStartWorkout(context); },
+                    fillColor: controller.todayWorkoutName.value.isEmpty ? Colors.grey : const Color(0xFFF5A623),
+                    textColor: Colors.white,
+                    fontSize: 14,
+                    borderRadius: 10,
+                    fontWeight: FontWeight.w600,
+                    buttonWidth: context.w(150),
+                    buttonHeight: 44,
+                  ),
+                ],
+              );
+            }),
           ),
         ],
       ),

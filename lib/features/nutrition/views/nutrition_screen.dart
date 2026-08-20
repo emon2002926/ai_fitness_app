@@ -4,6 +4,7 @@ import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/app_bar/build_app_bar.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/text/app_text.dart';
+import '../../../core/controllers/mascot_controller.dart';
 import 'package:get/get.dart';
 import '../controllers/nutrition_controller.dart';
 import 'cooking_steps_screen.dart';
@@ -31,6 +32,14 @@ class NutritionScreen extends StatelessWidget {
             child: CircularProgressIndicator(color: Color(0xFFF5A623)),
           );
         }
+
+        final isGenerating = MascotController.to.isPlanGenerating.value;
+        final isEmpty = controller.meals.isEmpty;
+
+        if (isGenerating || isEmpty) {
+          return _buildGeneratingFallback(context, 'Curating Your Meals');
+        }
+
         return RefreshIndicator(
           color: const Color(0xFFF5A623),
           backgroundColor: const Color(0xFF1A1A1A),
@@ -57,6 +66,50 @@ class NutritionScreen extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+
+  Widget _buildGeneratingFallback(BuildContext context, String title) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: context.w(20)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: EdgeInsets.all(context.w(24)),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1A1A1A),
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFFF5A623).withOpacity(0.3), width: 2),
+              ),
+              child: const CircularProgressIndicator(
+                color: Color(0xFFF5A623),
+                strokeWidth: 3,
+              ),
+            ),
+            SizedBox(height: context.h(32)),
+            AppText(
+              data: title,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: Colors.white,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: context.h(12)),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: context.w(20)),
+              child: AppText(
+                data: 'Our AI is analyzing your profile and crafting the perfect plan. This usually takes 10 to 15 minutes.',
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: Colors.white54,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

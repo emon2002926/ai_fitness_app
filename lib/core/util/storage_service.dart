@@ -21,12 +21,31 @@ class StorageService {
 
   static String? get refreshToken => _box.read(_refreshTokenKey);
 
-  // Mascot (workout_buddy) index
+  // Mascot data
+  static const _avatarSpeciesKey = 'avatar_species';
+  static const _avatarImageKey = 'avatar_image';
+
   static Future<void> saveMascotIndex(int index) async {
     await _box.write(_mascotIndexKey, index);
   }
 
   static int get mascotIndex => _box.read(_mascotIndexKey) ?? 0;
+
+  static Future<void> saveAvatarSpecies(String species) async {
+    await _box.write(_avatarSpeciesKey, species);
+  }
+
+  static String get avatarSpecies => _box.read(_avatarSpeciesKey) ?? 'lion';
+
+  static Future<void> saveAvatarImage(String? imageUrl) async {
+    if (imageUrl != null) {
+      await _box.write(_avatarImageKey, imageUrl);
+    } else {
+      await _box.remove(_avatarImageKey);
+    }
+  }
+
+  static String? get avatarImage => _box.read(_avatarImageKey);
 
 
   // Clear methods

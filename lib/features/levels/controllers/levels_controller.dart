@@ -83,7 +83,7 @@ class LevelsController extends GetxController {
 
   void _buildLevelPath(int current) {
     const visibleCount = 7;
-    final startLevel = (current - 2).clamp(1, 9999);
+    final startLevel = (current - 2).clamp(0, 9999);
 
     levels.value = List.generate(visibleCount, (i) {
       final lvl = startLevel + i;

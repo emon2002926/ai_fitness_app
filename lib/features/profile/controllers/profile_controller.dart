@@ -51,7 +51,7 @@ class ProfileController extends GetxController {
 
   Future<void> fetchAll() async {
     isLoading.value = true;
-    await Future.wait([_fetchOnboarding(), _fetchHome()]);
+    await Future.wait([_fetchOnboarding(), _fetchHome(), MascotController.to.fetchMascot()]);
     isLoading.value = false;
   }
   Future<void> _fetchOnboarding() async {

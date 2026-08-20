@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:ai_fitness_app/core/util/app_navigation.dart';
 import 'package:ai_fitness_app/features/auth/views/sign_in_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import '../widgets/workout_preview_dialog.dart';
 class HomeController extends GetxController {
   final isLoading = true.obs;
   final hasLoadedOnce = false.obs;
+  final isPlanGenerating = false.obs;
 
   final userName = ''.obs;
   final avatarUrl = 'assets/images/avatar.png'.obs;
@@ -90,6 +92,10 @@ class HomeController extends GetxController {
         streakCount.value  = d['streak'] ?? 0;
         workoutCount.value = d['count_of_workouts'] ?? 0;
         goalProgress.value = d['goal_progress_percentage'] ?? 0;
+        
+        if (d['user_id'] != null) {
+          MascotController.to.connectWebSocket(d['user_id']);
+        }
       } else if (response.statusCode == 401) {
         AppLog.error(endpoint, data, statusCode: response.statusCode);
         await StorageService.logout();
@@ -103,7 +109,6 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
-
 
   Future<void> fetchTodayWorkoutPlan() async {
     const endpoint = AppConstant.workoutPlanEndpoint;

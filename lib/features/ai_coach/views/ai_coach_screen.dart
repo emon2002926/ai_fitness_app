@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/util/app_navigation.dart';
 import '../../../core/util/screen_size.dart';
+import '../../../core/widgets/avatar/avatar_display_widget.dart';
 import '../../../core/widgets/text/app_text.dart';
 import '../../profile/views/profile_screen.dart';
 import '../controllers/ai_coach_controller.dart';
@@ -239,10 +240,9 @@ class _TypingIndicatorState extends State<_TypingIndicator>
             width: context.w(38),
             height: context.w(38),
             margin: EdgeInsets.only(right: context.w(10)),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: AssetImage('assets/images/mascot_avatar.png'),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(context.w(19)),
+              child: AvatarDisplayWidget(
                 fit: BoxFit.cover,
               ),
             ),
