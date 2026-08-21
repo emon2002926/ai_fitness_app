@@ -10,6 +10,7 @@ import '../../../core/util/app_log.dart';
 import '../../../core/util/app_navigation.dart';
 import '../../../core/util/storage_service.dart';
 import '../../auth/views/sign_in_screen.dart';
+import '../controllers/workout_controller.dart';
 class ExerciseTimerController extends GetxController {
   final String exerciseName;
   final int sets;
@@ -146,6 +147,12 @@ class ExerciseTimerController extends GetxController {
 
       if (response.statusCode == 201) {
         AppLog.response(endpoint, data);
+
+        // Notify the WorkoutController to mark this exercise as done
+        if (Get.isRegistered<WorkoutController>()) {
+          Get.find<WorkoutController>().markExerciseDone(currentIndex.value);
+        }
+
         if (context != null && context.mounted) {
           Navigator.of(context).pop();
         }

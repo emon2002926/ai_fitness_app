@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../util/screen_size.dart';
-
-
-
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTabSelected;
@@ -12,7 +9,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
     required this.currentIndex,
     required this.onTabSelected,
   });
-
   @override
   Widget build(BuildContext context) {
     final items = [

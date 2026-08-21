@@ -69,189 +69,200 @@ class _ExerciseTimerScreenState extends State<ExerciseTimerScreen> {
         onNotificationPressed: () {},
       ),
       body: SafeArea(
-        child: Obx(() => Padding(
+        child: Obx(() => SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: context.w(24)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: context.h(16)),
-              AppText(
-                data: 'Exercise ${controller.currentIndex.value + 1} of ${controller.allExercises.length}',
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                color: Colors.white38,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: context.h(8)),
-              AppText(
-                data: controller.currentName.value,
-                fontSize: 26,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: context.h(12)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top -
+                  MediaQuery.of(context).padding.bottom -
+                  kToolbarHeight,
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _PillBadge(
-                    icon: Icons.fitness_center_rounded,
-                    label: '${controller.currentSets.value} Sets',
-                    isGold: false,
-                  ),
-                  if (controller.currentReps.value.isNotEmpty &&
-                      controller.currentReps.value != 'N/A') ...[
-                    SizedBox(width: context.w(10)),
-                    _PillBadge(
-                      icon: Icons.play_arrow_rounded,
-                      label: '${controller.currentReps.value} Reps',
-                      isGold: true,
-                    ),
-                  ],
-                ],
-              ),
-              SizedBox(height: context.h(16)),
-              Container(
-                width: context.w(240),
-                height: context.w(240),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF1A1A1A),
-                  shape: BoxShape.circle,
-                ),
-                clipBehavior: Clip.hardEdge,
-                child: controller.currentImage.value.startsWith('http')
-                    ? Image.network(
-                  controller.currentImage.value,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => const Icon(
-                    Icons.fitness_center,
+                  SizedBox(height: context.h(16)),
+                  AppText(
+                    data: 'Exercise ${controller.currentIndex.value + 1} of ${controller.allExercises.length}',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
                     color: Colors.white38,
-                    size: 60,
+                    textAlign: TextAlign.center,
                   ),
-                )
-                    : Image.asset(
-                  controller.currentImage.value.isNotEmpty
-                      ? controller.currentImage.value
-                      : 'assets/images/exercise_image.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
-              SizedBox(height: context.h(16)),
-              AppText(
-                data: controller.formattedTime,
-                fontSize: 56,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-              ),
-              SizedBox(height: context.h(4)),
-              _SetProgressRow(controller: controller),
-              const Spacer(),
-              if (controller.isSavingAchievement.value)
-                Padding(
-                  padding: EdgeInsets.only(bottom: context.h(12)),
-                  child: const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Color(0xFFF5A623),
+                  SizedBox(height: context.h(8)),
+                  AppText(
+                    data: controller.currentName.value,
+                    fontSize: 26,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: context.h(12)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _PillBadge(
+                        icon: Icons.fitness_center_rounded,
+                        label: '${controller.currentSets.value} Sets',
+                        isGold: false,
+                      ),
+                      if (controller.currentReps.value.isNotEmpty &&
+                          controller.currentReps.value != 'N/A') ...[
+                        SizedBox(width: context.w(10)),
+                        _PillBadge(
+                          icon: Icons.play_arrow_rounded,
+                          label: '${controller.currentReps.value} Reps',
+                          isGold: true,
+                        ),
+                      ],
+                    ],
+                  ),
+                  SizedBox(height: context.h(16)),
+                  Container(
+                    width: context.w(240),
+                    height: context.w(240),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF1A1A1A),
+                      shape: BoxShape.circle,
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    child: controller.currentImage.value.startsWith('http')
+                        ? Image.network(
+                      controller.currentImage.value,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => const Icon(
+                        Icons.fitness_center,
+                        color: Colors.white38,
+                        size: 60,
+                      ),
+                    )
+                        : Image.asset(
+                      controller.currentImage.value.isNotEmpty
+                          ? controller.currentImage.value
+                          : 'assets/images/exercise_image.png',
+                      fit: BoxFit.contain,
                     ),
                   ),
-                ),
-              Row(
-                children: [
-                  Expanded(
-                    child: AppButton(
-                      buttonText: 'Restart',
-                      onPressed: controller.isSavingAchievement.value
-                          ? () {}
-                          : controller.restart,
-                      fillColor: Colors.transparent,
-                      textColor: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      borderColor: const Color(0xFFF5A623),
-                      borderWidth: 1.5,
-                    ),
+                  SizedBox(height: context.h(16)),
+                  AppText(
+                    data: controller.formattedTime,
+                    fontSize: 56,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
                   ),
-                  SizedBox(width: context.w(12)),
-                  Expanded(
-                    child: AppButton(
-                      buttonText: controller.isRunning.value ? 'Pause' : 'Resume',
-                      onPressed: controller.isSavingAchievement.value
-                          ? () {}
-                          : controller.togglePause,
-                      fillColor: const Color(0xFFF5A623),
-                      textColor: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: context.h(12)),
-              Row(
-                children: [
-                  if (!controller.isFirstExercise)
-                    Expanded(
-                      child: AppButton(
-                        buttonText: 'Previous',
-                        onPressed: controller.isSavingAchievement.value
-                            ? () {}
-                            : controller.previousExercise,
-                        fillColor: Colors.transparent,
-                        textColor: Colors.white38,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        borderColor: Colors.white12,
-                        borderWidth: 1,
+                  SizedBox(height: context.h(4)),
+                  _SetProgressRow(controller: controller),
+                  const Spacer(),
+                  if (controller.isSavingAchievement.value)
+                    Padding(
+                      padding: EdgeInsets.only(bottom: context.h(12)),
+                      child: const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Color(0xFFF5A623),
+                        ),
                       ),
                     ),
-                  if (!controller.isFirstExercise) SizedBox(width: context.w(12)),
-                  Expanded(
-                    flex: 2,
-                    child: AppButton(
-                      buttonText: controller.isSavingAchievement.value
-                          ? 'Saving...'
-                          : controller.completedSets.value >= controller.currentSets.value
-                          ? controller.isLastExercise
-                          ? 'Finish Workout'
-                          : 'Next Exercise'
-                          : 'Complete Set (${controller.completedSets.value}/${controller.currentSets.value})',
-                      onPressed: controller.isSavingAchievement.value
-                          ? () {}
-                          : () async {
-                        if (controller.completedSets.value >=
-                            controller.currentSets.value) {
-                          if (controller.isLastExercise) {
-                            await controller.submitAchievementForCurrent(
-                              context: context,
-                            );
-                          } else {
-                            await controller.submitAchievementForCurrent();
-                            controller.nextExercise();
-                          }
-                        } else {
-                          controller.completeSet();
-                        }
-                      },
-                      fillColor: controller.isSavingAchievement.value
-                          ? Colors.white24
-                          : controller.completedSets.value >= controller.currentSets.value
-                          ? const Color(0xFF4CAF50)
-                          : const Color(0xFFF5A623),
-                      textColor: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AppButton(
+                          buttonText: 'Restart',
+                          onPressed: controller.isSavingAchievement.value
+                              ? () {}
+                              : controller.restart,
+                          fillColor: Colors.transparent,
+                          textColor: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          borderColor: const Color(0xFFF5A623),
+                          borderWidth: 1.5,
+                        ),
+                      ),
+                      SizedBox(width: context.w(12)),
+                      Expanded(
+                        child: AppButton(
+                          buttonText: controller.isRunning.value ? 'Pause' : 'Resume',
+                          onPressed: controller.isSavingAchievement.value
+                              ? () {}
+                              : controller.togglePause,
+                          fillColor: const Color(0xFFF5A623),
+                          textColor: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
+                  SizedBox(height: context.h(12)),
+                  Row(
+                    children: [
+                      if (!controller.isFirstExercise)
+                        Expanded(
+                          child: AppButton(
+                            buttonText: 'Previous',
+                            onPressed: controller.isSavingAchievement.value
+                                ? () {}
+                                : controller.previousExercise,
+                            fillColor: Colors.transparent,
+                            textColor: Colors.white38,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            borderColor: Colors.white12,
+                            borderWidth: 1,
+                          ),
+                        ),
+                      if (!controller.isFirstExercise) SizedBox(width: context.w(12)),
+                      Expanded(
+                        flex: 2,
+                        child: AppButton(
+                          buttonText: controller.isSavingAchievement.value
+                              ? 'Saving...'
+                              : controller.completedSets.value >= controller.currentSets.value
+                              ? controller.isLastExercise
+                              ? 'Finish Workout'
+                              : 'Next Exercise'
+                              : 'Complete Set (${controller.completedSets.value}/${controller.currentSets.value})',
+                          onPressed: controller.isSavingAchievement.value
+                              ? () {}
+                              : () async {
+                            if (controller.completedSets.value >=
+                                controller.currentSets.value) {
+                              if (controller.isLastExercise) {
+                                await controller.submitAchievementForCurrent(
+                                  context: context,
+                                );
+                              } else {
+                                await controller.submitAchievementForCurrent();
+                                controller.nextExercise();
+                              }
+                            } else {
+                              controller.completeSet();
+                            }
+                          },
+                          fillColor: controller.isSavingAchievement.value
+                              ? Colors.white24
+                              : controller.completedSets.value >= controller.currentSets.value
+                              ? const Color(0xFF4CAF50)
+                              : const Color(0xFFF5A623),
+                          textColor: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: context.h(32)),
                 ],
               ),
-              SizedBox(height: context.h(32)),
-            ],
+            ),
           ),
         )),
       ),
+
     );
   }
 }

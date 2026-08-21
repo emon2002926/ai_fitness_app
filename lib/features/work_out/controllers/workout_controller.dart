@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import '../../../core/constants/app_constant.dart';
 import '../../../core/util/app_log.dart';
@@ -29,6 +30,9 @@ class WorkoutController extends GetxController {
 
   final exercises   = <Map<String, dynamic>>[].obs;
   final _weeklyPlan = <Map<String, dynamic>>[].obs;
+
+  /// Tracks the plan ID stored in GetStorage so we can detect plan changes.
+  static const _planIdKey = 'current_plan_id';
 
   @override
   void onInit() {
@@ -59,6 +63,15 @@ class WorkoutController extends GetxController {
         final plans = data['data'] as List;
         if (plans.isEmpty) return;
 
+        final planId   = plans[0]['id'] as int;
+        final storedId = GetStorage().read<int>(_planIdKey);
+
+        // New plan detected → clear stale done-exercise data
+        if (storedId != planId) {
+          await StorageService.clearDoneExercises();
+          await GetStorage().write(_planIdKey, planId);
+        }
+
         final weekly = (plans[0]['weekly_plan'] as List)
             .cast<Map<String, dynamic>>();
 
@@ -80,6 +93,7 @@ class WorkoutController extends GetxController {
         final todayIndex = _todayIndex(weekly);
         selectedDayIndex.value = todayIndex;
         _applyDay(todayIndex);
+
       } else if (response.statusCode == 401) {
         AppLog.error(endpoint, data, statusCode: response.statusCode);
         await StorageService.logout();
@@ -111,14 +125,21 @@ class WorkoutController extends GetxController {
     workoutExercises.value = rawExs.length;
     workoutDuration.value  = _sumDurations(rawExs);
 
-    exercises.value = rawExs.map((e) => <String, dynamic>{
-      'id':       e['id'],
-      'name':     e['name']     as String? ?? '',
-      'sets':     e['sets']     as String? ?? 'N/A',
-      'reps':     e['reps']     as String? ?? 'N/A',
-      'duration': e['duration'] as String? ?? 'N/A',
-      'image':    e['image']    as String? ?? '',
-      'done':     false,
+    // Restore done-state from persistent storage
+    final doneIds = StorageService.doneExerciseIds;
+
+    exercises.value = rawExs.map((e) {
+      final id   = e['id'] as int?;
+      final done = id != null && doneIds.contains(id);
+      return <String, dynamic>{
+        'id':       id,
+        'name':     e['name']     as String? ?? '',
+        'sets':     e['sets']     as String? ?? 'N/A',
+        'reps':     e['reps']     as String? ?? 'N/A',
+        'duration': e['duration'] as String? ?? 'N/A',
+        'image':    e['image']    as String? ?? '',
+        'done':     done,
+      };
     }).toList();
   }
 
@@ -140,7 +161,27 @@ class WorkoutController extends GetxController {
     );
   }
 
-  void onStartWorkout(BuildContext context) => onStartExercise(context, 0);
+  /// Marks exercise at [index] as done, updates the list, and persists to storage.
+  void markExerciseDone(int index) {
+    if (index < 0 || index >= exercises.length) return;
+    final updated = exercises.toList();
+    updated[index] = Map<String, dynamic>.from(updated[index])
+      ..['done'] = true;
+    exercises.value = updated;
+
+    // Persist so done-state survives app restarts
+    final id = updated[index]['id'] as int?;
+    if (id != null) StorageService.markExerciseDone(id);
+  }
+
+  /// Returns the index of the first incomplete exercise, or 0 if all done.
+  int get _nextIncompleteIndex {
+    final idx = exercises.indexWhere((e) => !(e['done'] as bool));
+    return idx == -1 ? 0 : idx;
+  }
+
+  void onStartWorkout(BuildContext context) =>
+      onStartExercise(context, _nextIncompleteIndex);
 
   int _todayIndex(List<Map<String, dynamic>> weekly) {
     final todayName = _fullDayName(DateTime.now().weekday);

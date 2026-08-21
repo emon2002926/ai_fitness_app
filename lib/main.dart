@@ -9,7 +9,7 @@ import 'features/splash/splash_screen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   AppBindings.init();
-  GetStorage();
+  GetStorage.init();
   Get.put(ApiServices(baseUrl: 'https://skinseekapi.dsrt321.online'));
   runApp(const MyApp());
 }
@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Fitlex',
       navigatorKey: AppNavigation.navigatorKey,
       home: const SplashScreen(),
     );
