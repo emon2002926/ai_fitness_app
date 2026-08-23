@@ -216,9 +216,27 @@ class _LevelCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(context.w(16)),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
-        borderRadius: BorderRadius.circular(context.w(16)),
-        border: Border.all(color: Colors.white70),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF2A1E00),
+            Color(0xFF1A1A1A),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(context.w(20)),
+        border: Border.all(
+          color: const Color(0xFFF5A623).withValues(alpha: 0.4),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFF5A623).withValues(alpha: 0.08),
+            blurRadius: 20,
+            spreadRadius: 0,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -226,15 +244,26 @@ class _LevelCard extends StatelessWidget {
             width: context.w(52),
             height: context.w(52),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(context.w(12)),
-              border: Border.all(color: const Color(0xFFF5A623), width: 2),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFF5A623), Color(0xFFD48B0F)],
+              ),
+              borderRadius: BorderRadius.circular(context.w(14)),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFFF5A623).withValues(alpha: 0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
             alignment: Alignment.center,
             child: Obx(() => AppText(
               data: '${controller.level.value}',
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              color: const Color(0xFFF5A623),
+              fontSize: 20,
+              fontWeight: FontWeight.w900,
+              color: Colors.black,
             )),
           ),
           SizedBox(width: context.w(14)),
@@ -270,10 +299,29 @@ class _LevelCard extends StatelessWidget {
             ),
           ),
           SizedBox(width: context.w(12)),
-          AvatarDisplayWidget(
-            width: context.w(60),
-            height: context.h(70),
-            fit: BoxFit.contain,
+          Container(
+            width: context.w(56),
+            height: context.w(56),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: const Color(0xFFF5A623).withValues(alpha: 0.5),
+                width: 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFFF5A623).withValues(alpha: 0.15),
+                  blurRadius: 10,
+                ),
+              ],
+            ),
+            child: ClipOval(
+              child: AvatarDisplayWidget(
+                width: context.w(56),
+                height: context.w(56),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ],
       ),

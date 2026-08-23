@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../core/controllers/mascot_controller.dart';
 import '../../../core/util/screen_size.dart';
 import '../../../core/widgets/avatar/avatar_display_widget.dart';
 import '../../../core/widgets/app_bar/build_app_bar.dart';
 import '../../../core/widgets/text/app_text.dart';
 import '../controllers/levels_controller.dart';
 
-
+// ─── Brand colours ──────────────────────────────────────────────────────────
+const _kAccent = Color(0xFFF5A623);
+const _kAccentDark = Color(0xFFD48B0F);
+const _kCardBg = Color(0xFF1A1A1A);
+const _kCompletedGreen = Color(0xFF4CAF50);
 
 class LevelsScreen extends StatelessWidget {
   const LevelsScreen({super.key});
@@ -33,28 +36,47 @@ class LevelsScreen extends StatelessWidget {
         child: Obx(() {
           if (controller.isLoading.value && !controller.hasLoadedOnce.value) {
             return const Center(
-              child: CircularProgressIndicator(color: Color(0xFFF5A623)),
+              child: CircularProgressIndicator(color: _kAccent),
             );
           }
           return Stack(
             children: [
-              // Background mascot — fixed, behind everything
-              Positioned(
-                right: -context.w(10),
-                bottom: context.h(140),
-                child: Opacity(
-                  opacity: 0.8,
-                  child: AvatarDisplayWidget(
-                    width: context.w(220),
-                    height: context.w(220),
-                    fit: BoxFit.contain,
+              // ── Subtle radial gradient background ──
+              Positioned.fill(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: RadialGradient(
+                      center: Alignment(0.6, -0.3),
+                      radius: 1.2,
+                      colors: [
+                        Color(0xFF1C1500),
+                        Colors.black,
+                      ],
+                    ),
                   ),
                 ),
               ),
-              // Scrollable level content on top
+
+              // ── Background mascot — rounded, subtle ──
+              Positioned(
+                right: -context.w(20),
+                bottom: context.h(100),
+                child: Opacity(
+                  opacity: 0.50,
+                  child: ClipOval(
+                    child: AvatarDisplayWidget(
+                      width: context.w(260),
+                      height: context.w(260),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+
+              // ── Scrollable level content ──
               RefreshIndicator(
-                color: const Color(0xFFF5A623),
-                backgroundColor: const Color(0xFF1A1A1A),
+                color: _kAccent,
+                backgroundColor: _kCardBg,
                 onRefresh: controller.fetchLevelData,
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -80,6 +102,7 @@ class LevelsScreen extends StatelessWidget {
   }
 }
 
+// ─── Progress Card ──────────────────────────────────────────────────────────
 class _LevelProgressCard extends StatelessWidget {
   final LevelsController controller;
   const _LevelProgressCard({required this.controller});
@@ -87,76 +110,129 @@ class _LevelProgressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
-      padding: EdgeInsets.all(context.w(16)),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white70, width: 1),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: context.w(48),
-            height: context.w(48),
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: const Color(0xFFF5A623), width: 1.5),
-            ),
-            child: Center(
-              child: AppText(
-                data: '${controller.currentLevel.value}',
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFFF5A623),
-              ),
-            ),
-          ),
-          SizedBox(width: context.w(14)),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppText(
-                  data: 'Level ${controller.currentLevel.value}',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                SizedBox(height: context.h(8)),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: LinearProgressIndicator(
-                    value: controller.xpProgress,
-                    backgroundColor: Colors.white12,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      Color(0xFFF5A623),
-                    ),
-                    minHeight: 6,
-                  ),
-                ),
-                SizedBox(height: context.h(6)),
-                AppText(
-                  data: '${controller.currentXp.value} / ${controller.maxXp.value} XP',
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white54,
-                ),
+          padding: EdgeInsets.all(context.w(16)),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF2A1E00),
+                Color(0xFF1A1A1A),
               ],
             ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: _kAccent.withOpacity(0.4),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: _kAccent.withOpacity(0.08),
+                blurRadius: 20,
+                spreadRadius: 0,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-          SizedBox(width: context.w(12)),
-          AvatarDisplayWidget(
-            width: context.w(56),
-            height: context.w(56),
-            fit: BoxFit.contain,
+          child: Row(
+            children: [
+              // ── Level badge ──
+              Container(
+                width: context.w(52),
+                height: context.w(52),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [_kAccent, _kAccentDark],
+                  ),
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: [
+                    BoxShadow(
+                      color: _kAccent.withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: AppText(
+                    data: '${controller.currentLevel.value}',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(width: context.w(14)),
+
+              // ── XP info ──
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppText(
+                      data: 'Level ${controller.currentLevel.value}',
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    SizedBox(height: context.h(8)),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: LinearProgressIndicator(
+                        value: controller.xpProgress,
+                        backgroundColor: Colors.white.withOpacity(0.08),
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(_kAccent),
+                        minHeight: 8,
+                      ),
+                    ),
+                    SizedBox(height: context.h(6)),
+                    AppText(
+                      data:
+                          '${controller.currentXp.value} / ${controller.maxXp.value} XP',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white54,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: context.w(12)),
+
+              // ── Rounded mascot avatar ──
+              Container(
+                width: context.w(56),
+                height: context.w(56),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: _kAccent.withOpacity(0.5),
+                    width: 2,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: _kAccent.withOpacity(0.15),
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
+                child: ClipOval(
+                  child: AvatarDisplayWidget(
+                    width: context.w(56),
+                    height: context.w(56),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ));
+        ));
   }
 }
 
+// ─── Level Path (snake / zigzag) ────────────────────────────────────────────
 class _LevelPath extends StatelessWidget {
   final LevelsController controller;
   const _LevelPath({required this.controller});
@@ -178,7 +254,7 @@ class _LevelPath extends StatelessWidget {
       if (levels.isEmpty) return const SizedBox.shrink();
 
       final screenWidth = MediaQuery.of(context).size.width - context.w(40);
-      const rowHeight = 100.0;
+      const rowHeight = 110.0;
       final totalHeight = levels.length * rowHeight + 20;
 
       final List<Offset> centers = List.generate(levels.length, (i) {
@@ -194,21 +270,22 @@ class _LevelPath extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
+            // ── Dashed connecting path ──
             Positioned.fill(
               child: CustomPaint(
                 painter: _CurvedPathPainter(centers: centers),
               ),
             ),
-            // Draw Nodes
+            // ── Level nodes ──
             ...List.generate(levels.length, (index) {
-              final item    = levels[index];
-              final center  = centers[index];
+              final item = levels[index];
+              final center = centers[index];
 
               final double nodeSize = item.state == LevelState.current
                   ? context.w(72)
                   : item.state == LevelState.completed
-                  ? context.w(60)
-                  : context.w(54);
+                      ? context.w(60)
+                      : context.w(54);
 
               final bool labelOnRight = _xFractions[index] <= 0.5;
 
@@ -245,15 +322,17 @@ class _LevelPath extends StatelessWidget {
   }
 
   Widget _levelLabel(LevelItem item, BuildContext context) {
+    final isActive = item.state != LevelState.locked;
     return AppText(
       data: 'Level ${item.level}',
       fontSize: 17,
       fontWeight: FontWeight.bold,
-      color: item.state == LevelState.locked ? Colors.white38 : Colors.white,
+      color: isActive ? Colors.white : Colors.white30,
     );
   }
 }
 
+// ─── Dashed curved path painter ─────────────────────────────────────────────
 class _CurvedPathPainter extends CustomPainter {
   final List<Offset> centers;
   const _CurvedPathPainter({required this.centers});
@@ -263,29 +342,30 @@ class _CurvedPathPainter extends CustomPainter {
     if (centers.length < 2) return;
 
     final paint = Paint()
-      ..color       = Colors.transparent
-      ..strokeWidth = 3.5
-      ..style       = PaintingStyle.stroke
-      ..strokeCap   = StrokeCap.round;
+      ..color = _kAccent.withOpacity(0.25)
+      ..strokeWidth = 2.5
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
 
     final path = Path();
     const nodeRadius = 36.0;
 
     for (int i = 0; i < centers.length - 1; i++) {
       final from = centers[i];
-      final to   = centers[i + 1];
+      final to = centers[i + 1];
 
-      final dx   = to.dx - from.dx;
-      final dy   = to.dy - from.dy;
+      final dx = to.dx - from.dx;
+      final dy = to.dy - from.dy;
       final dist = Offset(dx, dy).distance;
-      final nx   = dx / dist;
-      final ny   = dy / dist;
+      final nx = dx / dist;
+      final ny = dy / dist;
 
-      final start = Offset(from.dx + nx * nodeRadius, from.dy + ny * nodeRadius);
-      final end   = Offset(to.dx - nx * nodeRadius, to.dy - ny * nodeRadius);
+      final start =
+          Offset(from.dx + nx * nodeRadius, from.dy + ny * nodeRadius);
+      final end = Offset(to.dx - nx * nodeRadius, to.dy - ny * nodeRadius);
 
       final cp1 = Offset(start.dx, start.dy + (end.dy - start.dy) * 0.5);
-      final cp2 = Offset(end.dx,   start.dy + (end.dy - start.dy) * 0.5);
+      final cp2 = Offset(end.dx, start.dy + (end.dy - start.dy) * 0.5);
 
       path.moveTo(start.dx, start.dy);
       path.cubicTo(cp1.dx, cp1.dy, cp2.dx, cp2.dy, end.dx, end.dy);
@@ -295,10 +375,10 @@ class _CurvedPathPainter extends CustomPainter {
   }
 
   void _drawDashed(Canvas canvas, Path path, Paint paint,
-      {double dash = 9, double gap = 7}) {
+      {double dash = 8, double gap = 6}) {
     for (final m in path.computeMetrics()) {
-      double d      = 0;
-      bool drawing  = true;
+      double d = 0;
+      bool drawing = true;
       while (d < m.length) {
         final len = drawing ? dash : gap;
         if (drawing) canvas.drawPath(m.extractPath(d, d + len), paint);
@@ -313,6 +393,7 @@ class _CurvedPathPainter extends CustomPainter {
       old.centers != centers;
 }
 
+// ─── Individual level node ──────────────────────────────────────────────────
 class _LevelNode extends StatelessWidget {
   final LevelItem item;
   final double size;
@@ -320,39 +401,105 @@ class _LevelNode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (item.state == LevelState.current) {
-      return SizedBox(
-        width: size,
-        height: size,
+    switch (item.state) {
+      case LevelState.current:
+        return _buildCurrentNode();
+      case LevelState.completed:
+        return _buildCompletedNode();
+      case LevelState.locked:
+        return _buildLockedNode();
+    }
+  }
+
+  Widget _buildCurrentNode() {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [_kAccent, _kAccentDark],
+        ),
+        border: Border.all(color: Colors.white, width: 3),
+        boxShadow: [
+          BoxShadow(
+            color: _kAccent.withOpacity(0.5),
+            blurRadius: 18,
+            spreadRadius: 2,
+          ),
+          BoxShadow(
+            color: _kAccent.withOpacity(0.25),
+            blurRadius: 30,
+            spreadRadius: 5,
+          ),
+        ],
+      ),
+      child: Center(
         child: Image.asset(
           'assets/images/star_icon.png',
           width: size * 0.45,
           height: size * 0.45,
+          color: Colors.white,
         ),
-      );
-    }
+      ),
+    );
+  }
 
-    if (item.state == LevelState.completed) {
-      return SizedBox(
-        width: size,
-        height: size,
-        child: Image.asset(
-          'assets/images/check_icon.png',
-          width: size * 0.45,
-          height: size * 0.45,
-        ),
-      );
-    }
-
-    return SizedBox(
+  Widget _buildCompletedNode() {
+    return Container(
       width: size,
       height: size,
-      child: Opacity(
-        opacity: 0.35,
-        child: Image.asset(
-          'assets/images/check_icon.png',
-          width: size * 0.45,
-          height: size * 0.45,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF66BB6A),
+            Color(0xFF388E3C),
+          ],
+        ),
+        border: Border.all(
+          color: _kCompletedGreen.withOpacity(0.5),
+          width: 2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: _kCompletedGreen.withOpacity(0.2),
+            blurRadius: 10,
+            spreadRadius: 1,
+          ),
+        ],
+      ),
+      child: Center(
+        child: Icon(
+          Icons.check_rounded,
+          color: Colors.white,
+          size: size * 0.45,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLockedNode() {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xFF2A2A2A),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.1),
+          width: 2,
+        ),
+      ),
+      child: Center(
+        child: Icon(
+          Icons.lock_rounded,
+          color: Colors.white24,
+          size: size * 0.38,
         ),
       ),
     );
