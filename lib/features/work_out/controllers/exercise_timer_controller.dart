@@ -10,6 +10,10 @@ import '../../../core/util/app_log.dart';
 import '../../../core/util/app_navigation.dart';
 import '../../../core/util/storage_service.dart';
 import '../../auth/views/sign_in_screen.dart';
+import '../../home/controllers/home_controller.dart';
+import '../../levels/controllers/levels_controller.dart';
+import '../../profile/controllers/profile_controller.dart';
+import '../../progress/controllers/progress_controller.dart';
 import '../controllers/workout_controller.dart';
 class ExerciseTimerController extends GetxController {
   final String exerciseName;
@@ -153,6 +157,9 @@ class ExerciseTimerController extends GetxController {
           Get.find<WorkoutController>().markExerciseDone(currentIndex.value);
         }
 
+        // Refresh all screens so XP, level, streak, stats update everywhere
+        _refreshAllControllers();
+
         if (context != null && context.mounted) {
           Navigator.of(context).pop();
         }
@@ -167,6 +174,23 @@ class ExerciseTimerController extends GetxController {
       AppLog.error(endpoint, e.toString());
     } finally {
       isSavingAchievement.value = false;
+    }
+  }
+
+  /// Re-fetches data on every registered controller so all screens
+  /// reflect the latest XP, level, streak, and stats after an exercise.
+  void _refreshAllControllers() {
+    if (Get.isRegistered<HomeController>()) {
+      Get.find<HomeController>().loadAll();
+    }
+    if (Get.isRegistered<LevelsController>()) {
+      Get.find<LevelsController>().fetchLevelData();
+    }
+    if (Get.isRegistered<ProfileController>()) {
+      Get.find<ProfileController>().fetchAll();
+    }
+    if (Get.isRegistered<ProgressController>()) {
+      Get.find<ProgressController>().fetchProgressData();
     }
   }
 
