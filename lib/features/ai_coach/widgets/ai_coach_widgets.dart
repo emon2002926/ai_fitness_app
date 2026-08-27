@@ -252,7 +252,7 @@ class AiBubble extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(context.w(19)),
               child: AvatarDisplayWidget(
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
           ),

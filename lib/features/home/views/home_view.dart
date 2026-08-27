@@ -302,6 +302,7 @@ class _LevelCard extends StatelessWidget {
           Container(
             width: context.w(56),
             height: context.w(56),
+            padding: EdgeInsets.all(context.w(4)),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
@@ -317,9 +318,7 @@ class _LevelCard extends StatelessWidget {
             ),
             child: ClipOval(
               child: AvatarDisplayWidget(
-                width: context.w(56),
-                height: context.w(56),
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
           ),

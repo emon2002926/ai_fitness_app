@@ -6,12 +6,14 @@ class AvatarDisplayWidget extends StatelessWidget {
   final double? width;
   final double? height;
   final BoxFit fit;
+  final Alignment alignment;
 
   const AvatarDisplayWidget({
     Key? key,
     this.width,
     this.height,
     this.fit = BoxFit.contain,
+    this.alignment = Alignment.center,
   }) : super(key: key);
 
   @override
@@ -26,8 +28,9 @@ class AvatarDisplayWidget extends StatelessWidget {
           width: width,
           height: height,
           fit: fit,
+          alignment: alignment,
           errorBuilder: (context, error, stackTrace) {
-            return _fallbackImage();
+            return _fallbackImage(species);
           },
         );
       } else {
@@ -43,12 +46,14 @@ class AvatarDisplayWidget extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
+      alignment: alignment,
       errorBuilder: (context, error, stackTrace) {
         return Image.asset(
           'assets/images/mascot_lion.png',
           width: width,
           height: height,
           fit: fit,
+          alignment: alignment,
         );
       },
     );

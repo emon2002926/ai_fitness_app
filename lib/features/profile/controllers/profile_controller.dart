@@ -149,7 +149,8 @@ class ProfileController extends GetxController {
   void onLogOut(BuildContext context) async {
     StorageService.logout();
     await Future.delayed(const Duration(milliseconds: 100));
-    AppNavigation.pushAndClear(const SignInScreen());
+    Get.offAll(const SignInScreen());
+    // AppNavigation.pushAndClear(const SignInScreen());
   }
 
   void currentWeightTap(BuildContext context) =>

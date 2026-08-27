@@ -57,17 +57,18 @@ class LevelsScreen extends StatelessWidget {
                 ),
               ),
 
-              // ── Background mascot — rounded, subtle ──
+              // ── Background mascot — subtle full silhouette ──
               Positioned(
-                right: -context.w(20),
-                bottom: context.h(100),
-                child: Opacity(
-                  opacity: 0.50,
-                  child: ClipOval(
+                right: -context.w(10),
+                bottom: context.h(80),
+                child: IgnorePointer(
+                  child: Opacity(
+                    opacity: 0.35,
                     child: AvatarDisplayWidget(
-                      width: context.w(260),
-                      height: context.w(260),
-                      fit: BoxFit.cover,
+                      width: context.w(220),
+                      height: context.h(300),
+                      fit: BoxFit.contain,
+                      alignment: Alignment.bottomRight,
                     ),
                   ),
                 ),
@@ -205,6 +206,7 @@ class _LevelProgressCard extends StatelessWidget {
               Container(
                 width: context.w(56),
                 height: context.w(56),
+                padding: EdgeInsets.all(context.w(4)),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
@@ -220,9 +222,7 @@ class _LevelProgressCard extends StatelessWidget {
                 ),
                 child: ClipOval(
                   child: AvatarDisplayWidget(
-                    width: context.w(56),
-                    height: context.w(56),
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
